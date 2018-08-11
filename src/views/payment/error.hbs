@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/static/">
+    <title>Langroo Plan</title>
+    <link rel="shortcut icon" type="image/jpeg" href="assets/img/logo.jpg" />
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="https://afeld.github.io/emoji-css/emoji.css">
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4" id="request">
+            <div class="row">
+                <div class="col-md-12 title-container">
+                    <h1>Oh no! <i class="em em-cry"></i></h1></div>
+            </div>
+            <div class="row plan-container">
+                <div class="col-md-12 plan-container">
+                    <p>Something went wrong with your payment</p>
+                </div>
+            </div>
+            <div class="row start-button-container">
+                <div class="col-md-12"><a href="#" id="try-again"><span>Try again later <i class="em em-anguished"></i></span></a></div>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $("#try-again").on('click', function(event){
+            event.preventDefault();
+            window.close();
+        });
+    });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+/node_modules
+/dist
+.env
+#**/sheets.token.json
+yarn.lock
+.vscode
+.idea
+config.js
+.vimrc
+.jsbeautifyrc
+Dockerfile
+deploy.sh

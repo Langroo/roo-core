@@ -1,0 +1,12 @@
+module.exports = {
+  type: 'service_account',
+  project_id: 'infinite-sight-181803',
+  private_key_id: '60ff38731e5a879028010263074160d7c82c82d8',
+  private_key: '-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCZwmSCmcufu7Qk\n8jDqudMOZvUinpWH5vXEzrBiceWFPD6BkNUrdgibChhqKMK85GW0eZex3EGKuQiV\npHShtERGKvOPuEs3ch5MBszywe0jNTAPMltWrsXIJpOPgm+0kFRLng0QGrfxh5VL\nmRQaOqWUlKab3j4HGxdhHKhV5+WE2NrZJP1w9dTchRPMvyT7pjosYZr5R8XS6/z9\nfQzmjhYyjDTbs9iDCM2PFGCgPG+hI+A3zUiq9fbHZty74pRGhaHDbJszYy2MFvpX\nVOvM83n/OeUvD5BAXkzhPp8Zg5IFtdcCI6QdS15E+Gep5xZkws4ymeEFryJ47tEi\njszETwg1AgMBAAECggEAMig2Bl5qDKy76pNwvpkojpmqXIUzzRXb1TwBUNPLpedN\nkpFu4FMMIpsr9LFgOSMeRD2n7NanMLwEX2A6xaca4HLRafAZ5TfeRzmusH/vPd1z\nVHm+TuwLS6u91gIcM2Ajh1lC9J5qo6jxXCxO4PGBoxLMuKrKPCIrwbuJ9CAGAIwF\nectgBC8eGfdzUa9aZesUHEFwhw53S57izXcct9CfbmvqmRqiZQ53cy6RzTQpYc0y\n3I9HG10TdvbHPC+Kx3h0xbHn96AbLr5TdL8Fa1H6WNUD7J7EixcuoLMNwIffzxyP\n0QKOkPo5PYpxEY8WDxQ9c1tNIQs6pv7F6gsG2JmtXwKBgQDLN/fWZUhDcrX7zyRZ\nNfRpGr0Gows9mHaJGA9JxdNwTsMjK+/+i0KElE3nBpydyT1QnYslnuFJ6CpiNH3A\nJnyXK4X5SEoHFoqDFe0Hvpj2L/CjkbdWCCs21Vz6WBj6g7o6oY/NUToVd8Ah1IAk\nujHbGH4nh7b7444+YpV/4sTelwKBgQDBsd7uLux8QlPy8gj8VpH1MULno3eOlHIz\n2HkkVTpUqkwGCn6BmssG5tZXc3xIriHQxwku+OUq/Q/rKCf62FKD0SAoITwYNIUw\nWMTFLOPhSsU2/EoQwMYQ+gBIAsjSfrowL3oayGTRITzdHwzjI5isQ8n95iseUwVH\nlMzJMDT1EwKBgDGgJUGR0ifGZ3JqjzHJ3zmbcfWg8ynDhY7M9U7KpGuUkEqSfDTo\nxQGjRbLZBn3xmquJDWXOeq2VqGP69Ypq25n+4uSRJqK8em6weAWgIbJc2qLW/rJf\npE3rpJztzou+h0eyFG/LGigL6jtYrUJKxcn/HS+CEMlKNH4/jMqCEhlZAoGAKzWe\n4cud/epeB+hukLxPOz+OCVayKSB8iYxVGgHZTWHgK8jTh94cRKHiVwfwRdZyvLxq\nFAx6MyjZEECZCqCPZ9CTN+CSI2Q0AiELZGErROsFK8sEStB2XvsmbOoSGsMijfVJ\nbAggVXbwuPNgUJt0R5mnyfg6zjz/BITxWkBiz/kCgYEAwjqrJeIOq3Inh1D86/Bq\ncQNJxE9+LdIHZa1zLUD7LFMf3dNDiSDNQIaNK4ta3uxrCRGKxwCK0pvK7XksfZtq\nB9r9aid3d/i40UTiMZL76zsbvveT5ItO8rYojztsTJjPqorr+ajLeNCkZFcxLOkQ\n3rvTWVGygkbXDTJaplAjR1w=\n-----END PRIVATE KEY-----\n',
+  client_email: 'langroo-api-jwt@infinite-sight-181803.iam.gserviceaccount.com',
+  client_id: '111648028085898810606',
+  auth_uri: 'https://accounts.google.com/o/oauth2/auth',
+  token_uri: 'https://accounts.google.com/o/oauth2/token',
+  auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
+  client_x509_cert_url: 'https://www.googleapis.com/robot/v1/metadata/x509/langroo-api-jwt%40infinite-sight-181803.iam.gserviceaccount.com',
+};

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/static/">
+    <title>{{title}} - Langroo Plan</title>
+    <link rel="shortcut icon" type="image/jpeg" href="assets/img/logo.jpg" />
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="https://afeld.github.io/emoji-css/emoji.css">
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4" id="request">
+            <div class="row">
+                <div class="col-md-12 title-container">
+                    <h1>{{title}}</h1></div>
+            </div>
+            <div class="row plan-container">
+                <div class="col-md-12 plan-container">
+                    <p>Bi-Weekly Subscription ({{currency.symbol}}{{amountPerWeek}}x2)</p>
+                    <p class="big-title">{{currency.symbol}} {{amount}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 detail-list-container">
+                    <ul class="list-group">
+                        {{#each detail}}
+                        <li class="list-group-item"><span>{{this}}</span></li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+            <div id="stripe-button-container" class="row start-button-container" style="display:none;">
+                <div class="col-md-12"><a href="#" id="pay-with-stripe"><span>Pay with </span><span class="bold">Stripe </span></a></div>
+                <div 
+                    id="stripe-values"
+                    src="//checkout.stripe.com/checkout.js" 
+                    class="stripe-button" 
+                    data-key="{{key}}" 
+                    data-amount="{{amountBase100}}"
+                    data-name="{{title}}" 
+                    data-description="{{description}}" 
+                    data-locale="{{locale}}" 
+                    data-currency="{{currency.value}}"
+                    style="display:none;">
+                </div>
+                <form id="stripe-button" action="/payment/charge" method="post">
+                    <input type="hidden" name="chargeAmount" value="{{amountBase100}}">
+                    <input type="hidden" name="currency" value="{{currency.value}}">
+                    <input type="hidden" name="description" value="{{description}}">
+                    <input type="hidden" name="conversationId" value="{{conversationId}}">
+                    <input type="hidden" name="planId" value="{{planId}}">
+                </form>
+            </div>
+            <!--<div class="row start-button-container">
+                <div class="col-md-12"><a href="/payment/paypal/{{type}}/{{conversationId}}/{{currency.value}}" id="pay-with-paypal"><span>Pay with </span><span class="bold">Paypal </span></a></div>
+            </div>-->
+        </div>
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+    $(document).ready(function(){
+
+        //-- Override jQuery
+        (function (old) {
+            $.fn.attr = function () {
+                if (arguments.length === 0) {
+                    if (this.length === 0) {
+                        return null;
+                    }
+
+                    var obj = {};
+                    $.each(this[0].attributes, function () {
+                        if (this.specified) {
+                            obj[this.name] = this.value;
+                        }
+                    });
+                    return obj;
+                }
+
+                return old.apply(this, arguments);
+            };
+        })($.fn.attr);
+        
+        function loadScript(data, callback) {
+            var script = document.createElement("script")
+            script.type = "text/javascript";
+
+            //-- Add data elements
+            for (var key in data)
+                script.setAttribute(key, data[key]);
+
+            if (script.readyState) {  
+                //-- Internet Explorer
+                script.onreadystatechange = function () {
+                    if (script.readyState === "loaded" || script.readyState === "complete") {
+                        script.onreadystatechange = null;
+                        callback(script);
+                    }
+                };
+            } else {  
+                //-- Other Browsers
+                script.onload = function () { callback(script); };
+            }
+
+            document.getElementById("stripe-button").appendChild(script);
+        }
+
+
+        //-- Load async script
+        function loadStripeButton(){
+            return new Promise(function(resolve, reject){
+                var data = $("div#stripe-values").attr();
+                delete data.id;
+                delete data.style;
+                loadScript(data, function (element) {
+                    console.log("Stripe button is ready!");
+                    resolve(element);
+                });
+            });
+        }
+        
+
+
+        //-- Events
+        loadStripeButton()
+        .then(function (element) {
+            $("#stripe-button-container").css('display', 'block');
+            $("button.stripe-button-el").removeAttr('style').css({
+                "position": "absolute",
+                "left": "0",
+                "right": "0",
+                "opacity": "0",
+                "width": "100%",
+                "height": "50px"
+            });
+        });
+
+    });
+    </script>
+</body>
+
+</html>
