@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const broadcastSender = require('../dialogs/dialogs-builder').broadcastSender
+const broadcastQuizTools = require('../general').broadcastQuiz
 
 router.post('/', async (request, response) => {
   try {
@@ -9,7 +10,11 @@ router.post('/', async (request, response) => {
     if (!dialogName || !labelToExclude) {
       throw new Error('Parameters in request missing')
     }
+    // -- Send the broadcast dialog with the messages of the Quiz
     const broadcastId = await broadcastSender.sendBroadcastMessage(dialogName, labelToExclude)
+    // -- Lock the user in the Quiz Context to force him to answer
+    broadcastQuizTools.setContextInBot()
+      .catch(() => console.log('An error occurred setting the users awaiting_answer parameter to 1 for the quiz answer'))
     console.log('\nBroadcast Ids List ::\n', broadcastId)
     response.json({
       statusMessage: 'Broadcast Message Sent Successfully',

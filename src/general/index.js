@@ -5,4 +5,5 @@ module.exports = {
   maps: require('./maps/index'),
   string: require('./string'),
   slack: require('./slack'),
+  broadcastQuiz: require('./broadcast-quiz'),
 }
