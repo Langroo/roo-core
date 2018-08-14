@@ -85,7 +85,6 @@ Promise.all([MongoDB, Redis])
   app.use('/dialogs', routes.flow)
   app.use('/payment', routes.payment)
   app.use('/tutor-request', routes.tutorRequest)
-  app.use('/events', routes.events)
   app.use('/broadcast', routes.broadcastMessages)
 
   // Where's my app running
