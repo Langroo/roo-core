@@ -11,6 +11,8 @@ class broadcastQuiz {
       const userHash = generateHash(user.senderId)
       await redisManagement.hashSetUser(userHash, 'awaiting_answer', '1')
         .catch(err => console.log(err))
+      await redisManagement.hashSetUser(userHash, 'current_pos', 'quiz')
+        .catch(err => console.log(err))
     }
   }
 
