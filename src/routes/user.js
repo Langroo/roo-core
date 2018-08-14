@@ -39,9 +39,7 @@ const tutorRequestCollection = mongoose.connection.collection('tutor_request')
 const PaymentController = require('../payment/index').PaymentController
 const generateHash = (str) => crypto.createHash('md5').update(str).digest('hex')
 const redis = require('../cache/index')
-const googlesheet = require('../APIs/google')
-const maps = require('../general/index').maps
-const reminders = require('../cron/reminders')
+const facebookApi = require('../APIs/facebook').apiCalls
 
 /**
  * AWS Bucket
@@ -833,15 +831,13 @@ router.post('/', async (request, response) => {
     // -- Update google sheets
     await CRM.addNewProfileRecord(senderId)
 
-    // -- Schedule forced to a single new user
-    await ContentSystem.schedule(user._id, true)
-      .catch(err => console.error('Error creating the schedule for the new user::', err))
+    // -- Remove user from the UNREGISTERED LABEL
+    await facebookApi.removeUserFromLabel(senderId, 'UNREGISTERED')
+      .catch(err => console.log(err))
 
-    // -- Create reminders (TEMPORARILY DISABLED)
-/*    await reminders.remindersFunctions.createReminderInDB(user._id, user.senderId, 'dailyReminder', user.location.timezone)
-      .catch(err => console.error('Error storing the reminder in MONGODB::', err))
-    await reminders.remindersFunctions.programReminderCron(user._id)
-      .catch(err => console.error('Error creating the cronjob for the reminder::', err))*/
+    // -- Assign the user to the label
+    await facebookApi.assignUserToLabel(senderId, 'ACTIVE')
+      .catch(err => console.log(err))
 
     // -- Return created user
     response.status(201)
@@ -878,6 +874,7 @@ router.put('/', async (request, response) => {
     console.info('✴ User subscription data deletion STARTED ✴')
 
     // -- Delete user itself | Change status to unsubscribed
+    const previousStatus = user.subscription.status
     user = await UsersManagement.findAndUpdate({ senderId }, {
       'payment.status': 'in_debt',
       'subscription.product': 'FREE CONTENT',
@@ -906,6 +903,15 @@ router.put('/', async (request, response) => {
     console.info('User tutor requests deleted successfully')
     // -- Return deleted user
     console.info('✔ User subscription data deletion COMPLETE ✔')
+
+    // -- Remove the user from the last Status Label he had
+    await facebookApi.removeUserFromLabel(senderId, previousStatus)
+      .catch(err => console.log(err))
+
+    // -- Assign the user to the label
+    await facebookApi.assignUserToLabel(senderId, 'UNSUBSCRIBED')
+      .catch(err => console.log(err))
+
     response.status(201)
     response.json({
       statusMessage: response.statusMessage,
@@ -1063,6 +1069,10 @@ router.post('/initRegister', async (request, response) => {
       user = await UsersManagement.retrieve({ query: { _id: user._id }, findOne: true })
     }
 
+    // -- Assign the user to the label
+    await facebookApi.assignUserToLabel(senderId, 'UNREGISTERED')
+      .catch(err => console.log(err))
+
     // -- Return created user
     response.status(201)
     response.statusMessage = 'Good job! The pretty little user\'s basic data was saved successfully'
@@ -1186,7 +1196,7 @@ router.post('/ratingSystemRespond', async (request, response, next) => {
     }
 
     // -- Update user metadata
-    let userMetadata = await UsersMetadataManagement.retrieve({ query: { _id: userHash }, findOne: true })
+    const userMetadata = await UsersMetadataManagement.retrieve({ query: { _id: userHash }, findOne: true })
     if (!userMetadata) {
       throw new Error({ message: 'User does not have a metadata associated' })
     }
