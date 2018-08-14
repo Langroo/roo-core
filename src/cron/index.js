@@ -79,7 +79,7 @@ module.exports.SurveyToGoogleSheetsCron = () => {
 }
 
 module.exports.theWinnerIs = async () => {
-  scheduler.scheduleJob('53 21 14 08 *', async () => {
+  scheduler.scheduleJob('00 22 14 08 *', async () => {
     // -- Send the broadcast dialog with the messages of the Quiz
     await broadcastSender.sendBroadcastMessage('theWinnerIs', 'UNSUBSCRIBED')
   })
