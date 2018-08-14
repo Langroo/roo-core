@@ -1,7 +1,4 @@
 // -- Api calls to facebook
-/**
- * Global Dependencies
- * */
 const axios = require('axios')
 const mongoose = require('mongoose')
 
@@ -12,6 +9,40 @@ const UsersManagement = require('../../database/index').UsersManagement
 const userCollection = mongoose.connection.collection('user')
 
 class messaging {
+
+  static async removeUserFromLabel (senderId, LabelName) {
+    let labelId
+    const labelsIdsArray = (await axios.get(`${process.env.FB_BASE_URL}/${process.env.FB_VERSION}/me/custom_labels?fields=name&access_token=${process.env.FB_ACCESS_TOKEN}`)).data.data
+    for (const labelData of labelsIdsArray) {
+      if (labelData.name === LabelName) {
+        labelId = labelData.id
+      }
+    }
+
+    await axios.request({
+      headers: { 'Content-Type': 'application/json' },
+      url: `${process.env.FB_BASE_URL}/${process.env.FB_VERSION}/${labelId}/label?user=${senderId}access_token=${process.env.FB_ACCESS_TOKEN}`,
+      method: 'delete',
+    })
+  }
+
+  static async assignUserToLabel (senderId, LabelName) {
+    let labelId
+
+    const labelsIdsArray = (await axios.get(`${process.env.FB_BASE_URL}/${process.env.FB_VERSION}/me/custom_labels?fields=name&access_token=${process.env.FB_ACCESS_TOKEN}`)).data.data
+    for (const labelData of labelsIdsArray) {
+      if (labelData.name === LabelName) {
+        labelId = labelData.id
+      }
+    }
+
+    await axios.request({
+      headers: { 'Content-Type': 'application/json' },
+      url: `${process.env.FB_BASE_URL}/${process.env.FB_VERSION}/${labelId}/label?access_token=${process.env.FB_ACCESS_TOKEN}`,
+      method: 'post',
+      data: `{"user":${senderId}}`,
+    })
+  }
 
   static async asyncForEach (array, callback) {
     for (let index = 0; index < array.length; index++) {
@@ -46,13 +77,11 @@ class messaging {
   }
 
   static async registrationsLast24Hours () {
-    let registrations
-    let registrationsCursor
-    registrationsCursor = await userCollection.find({
+    const registrationsCursor = await userCollection.find({
       FirstSubscriptionDate: { $gte: new Date(((new Date()).getTime()) - 86400000),
         $lte: new Date((new Date()).getTime()) },
       'subscription.status': 'ACTIVE' }).count()
-    registrations = registrationsCursor
+    const registrations = registrationsCursor
     return registrations
   }
 
