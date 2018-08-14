@@ -1,4 +1,4 @@
-<div id="wrap">
+<div id="wrap" class="jumbotron">
 
     <div class="page-header">
         <div class="container">
@@ -109,7 +109,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    Privacy Policy of {{FB_PAGE_URL}}
+                    <a class="btn btn-primary" href="/" role="button">Return Home</a>
                 </div>
             </div>
         </div>
@@ -136,7 +136,7 @@
         replacement.innerHTML = addStylesNode.textContent
         document.body.appendChild(replacement)
         addStylesNode.parentElement.removeChild(addStylesNode)
-    }
+    };
     var raf = requestAnimationFrame || mozRequestAnimationFrame || webkitRequestAnimationFrame || msRequestAnimationFrame
     if (raf) {
         raf(function () {
