@@ -6,6 +6,5 @@ module.exports = {
   flow: require('./flow'),
   payment: require('./payment'),
   tutorRequest: require('./tutor_request'),
-  events: require('./events'),
   broadcastMessages: require('./broadcast'),
 }

@@ -80,14 +80,14 @@ module.exports.SurveyToGoogleSheetsCron = () => {
 // -- Update/Create Facebook Labels and assign the users
 module.exports.LabelCreationCron = async () => {
   const taskName = 'Facebook Label Creation CronJob'
-  await apiCalls.messaging.createBroadcastLabel()
+  // await apiCalls.messaging.createBroadcastLabel()
   await apiCalls.messaging.userStatusLabels()
   await apiCalls.messaging.userLevelLabels()
   scheduler.scheduleJob(taskName, '0,30 * * * *', async () => {
     try {
       console.info('----------- CRONJOB INFORMATION -----------')
       console.info('Running (%s)\nAt :: [%s]', taskName, Date())
-      await apiCalls.messaging.createBroadcastLabel()
+      // await apiCalls.messaging.createBroadcastLabel()
       await apiCalls.messaging.userStatusLabels()
       await apiCalls.messaging.userLevelLabels()
     } catch (reason) {

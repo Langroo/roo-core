@@ -48,7 +48,11 @@ Promise.all([MongoDB, Redis])
   app.set('port', process.env.PORT || 5000)
 
   // -- View engine setup
-  app.engine('hbs', hbs({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: path.join(__dirname, 'views', 'layouts') }))
+  app.engine('hbs', hbs({
+    extname: 'hbs',
+    defaultLayout: 'home',
+    layoutsDir: path.join(__dirname, 'views', 'layouts'),
+  }))
   app.set('views', path.join(__dirname, 'views'))
   app.set('view engine', 'hbs')
 
@@ -74,13 +78,13 @@ Promise.all([MongoDB, Redis])
   const routes = require('./routes')
 
   app.use('/', routes.main)
+  app.use('/privacy-policy', routes.main)
   app.use('/oauth', routes.oauth)
   app.use('/user', routes.user)
   app.use('/facebook', routes.facebook)
   app.use('/dialogs', routes.flow)
   app.use('/payment', routes.payment)
   app.use('/tutor-request', routes.tutorRequest)
-  app.use('/events', routes.events)
   app.use('/broadcast', routes.broadcastMessages)
 
   // Where's my app running

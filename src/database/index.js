@@ -9,7 +9,6 @@ module.exports = {
   SubscriptionManagement: require('./subscription/index').management,
   PronunciationManagement: require('./pronunciation/index').management,
   AnalyticsManagement: require('./analytics/index').management,
-  EventsManagement: require('./events/index').management,
   MetricsManagement: require('./metric/index').management,
   RemindersManagement: require('./reminder/index').management,
 }
