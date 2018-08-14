@@ -1,5 +1,11 @@
 const dialogsMessages = {
   replies: {
+    theWinnerIs: [
+      { type: 'text', content: 'TODAY\'S WINNER 🏆' },
+      { type: 'text', content: 'Maria Ortega from Spain!!' },
+      { type: 'text', content: 'Maria will now receive a free 15 minute class with one of our English tutors! 🙋' },
+      { type: 'text', content: 'See you on Wednesday!' },
+    ],
     mondayBroadcastQuiz: [
       { type: 'text', content: 'Today\'s Langroo Quiz is HERE!' },
       {
