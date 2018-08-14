@@ -78,6 +78,7 @@ Promise.all([MongoDB, Redis])
   const routes = require('./routes')
 
   app.use('/', routes.main)
+  app.use('/privacy-policy', routes.main)
   app.use('/oauth', routes.oauth)
   app.use('/user', routes.user)
   app.use('/facebook', routes.facebook)
