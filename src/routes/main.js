@@ -10,6 +10,11 @@ router.get('/', (request, response) => {
   return response.render('home')
 })
 
+router.get('/privacy-policy', (request, response) => {
+  response.status(200)
+  return response.render('privacy-policy')
+})
+
 /**
  * GET
  * A simple test route

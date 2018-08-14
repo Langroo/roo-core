@@ -5,24 +5,6 @@ const User = require('./user.model');
 
 class UsersManagement {
 
-  /**
-   * Create new User
-   * @param id => FB User identifier
-   * @param name => Complete name
-   * @param first_name => First Name
-   * @param last_name => Last Name
-   * @param short_name => Nickname
-   * @param profile_link => Link to the profile
-   * @param age => Age
-   * @param birthday => Birthday
-   * @param email => Email
-   * @param gender => Gender
-   * @param language => Language
-   * @param location => User's location
-   * @param education => Education (Schools and Colleges)
-   * @param devices => Devices
-   * @param message_us_on => First day user massaged us
-   */
   async create (userModel, params = { updateIfExist: false }) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -49,6 +31,7 @@ class UsersManagement {
   }) {
     return new Promise((resolve, reject) => {
       if (!options.findOne) {
+        // -- Returns an ARRAY
         User.find(options.query, (error, usersFound) => {
           if (error) { reject(error)
           } else { resolve(usersFound) }
@@ -62,35 +45,6 @@ class UsersManagement {
     })
   }
 
-    /**
-     * Update User
-     * @param name => Complete name
-     * @param first_name => First Name
-     * @param last_name => Last Name
-     * @param short_name => Nickname
-     * @param profile_link => Link to the profile
-     * @param age => Age
-     * @param birthday => Birthday
-     * @param email => Email
-     * @param gender => Gender
-     * @param language => Language
-     * @param location => User's location
-     * @param education => Education (Schools and Colleges)
-     * @param devices => Devices
-     * @param message_us_on => First day user massaged us
-     */
-    /* update(id, userModel){
-        return new Promise((resolve, reject) => {
-            User.findOneAndUpdate({id: id}, userModel, {new: true}, function(error, UserUpdated, response){
-                if (error) reject(error);
-                else resolve(UserUpdated);
-            });
-        });
-    };*/
-
-    /**
-     * Update User
-     */
   async update (_id, set) {
     try {
       return await User.findOneAndUpdate({ _id }, { $set: set }, { new: true })
