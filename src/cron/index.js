@@ -86,7 +86,7 @@ module.exports.newQuiz = async () => {
 }
 
 module.exports.theWinnerIs = async () => {
-  scheduler.scheduleJob('17 30 15 08 *', async () => {
+  scheduler.scheduleJob('30 17 15 08 *', async () => {
     // -- Send the broadcast dialog with the messages of the Quiz
     await broadcastSender.sendBroadcastMessage('theWinnerIs', 'UNSUBSCRIBED')
   })
