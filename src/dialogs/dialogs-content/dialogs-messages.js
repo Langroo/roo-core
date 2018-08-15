@@ -43,7 +43,7 @@ const dialogsMessages = {
       },
       {
         type: 'image',
-        content: 'https://lh3.googleusercontent.com/-WUKeG3vQENk/Wk3eR7Kd_QI/AAAAAAAAA0M/edH_FTis2tI2fNsMMLwktC09LxkvCz6fgCJoC/w530-h398-n/post20180102_0800.png',
+        content: 'https://keyassets-p2.timeincuk.net/wp/prod/wp-content/uploads/sites/53/2016/11/Sultana-Scones-CS.jpg',
       },
       { type: 'text', content: 'Write your answer below {{first_name}} 👇:' },
     ],
