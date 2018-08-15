@@ -1,9 +1,22 @@
 const dialogsMessages = {
   replies: {
+    initBroadcastMessage: [
+      { type: 'text', content: 'A big hello from all the team at Langroo!! 👋' },
+      {
+        type: 'text',
+        content: 'Starting from today, we will be sending native English quizzes 📝 every Monday, Wednesday and Friday, with prizes for those who respond with the correct answer!! 🎁',
+      },
+      { type: 'text', content: 'Have fun and share with your friends! ❤️️' },
+    ],
     theWinnerIs: [
+      { type: 'text', content: 'Here our today\'s results:' },
+      { type: 'text', content: 'ANSWER 📕:\n{{answer}}' },
       { type: 'text', content: 'TODAY\'S WINNER 🏆' },
-      { type: 'text', content: 'Maria Ortega from Spain!!' },
-      { type: 'text', content: 'Maria will now receive a free 15 minute class with one of our English tutors! 🙋' },
+      { type: 'text', content: '{{winner}} from {{country}}!!!' },
+      {
+        type: 'text',
+        content: '{{winner}} will now receive a free 15 minute class with one of our English tutors! 🙋',
+      },
       { type: 'text', content: 'See you on Wednesday!' },
     ],
     mondayBroadcastQuiz: [
@@ -23,6 +36,10 @@ const dialogsMessages = {
       {
         type: 'text',
         content: 'The quickest person ⌚️ to respond with the right answer will be announced as our winner tonight! 🙌',
+      },
+      {
+        type: 'text',
+        content: '{{first_name}} this is something us people in the UK 🇬🇧 LOVE to eat, but what is it called?? 😱',
       },
       {
         type: 'image',
