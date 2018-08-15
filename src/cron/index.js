@@ -4,6 +4,7 @@ const CRM = require('../APIs/google/crm.management')
 const SheetsToMongo = require('./sheets-to-mongo')
 const UserActions = require('./user-actions')
 const apiCalls = require('../APIs/facebook/index').apiCalls
+const broadcastSender = require('../dialogs/dialogs-builder').broadcastSender
 
 // -- Main scheduled job that updates the profile and parses GoogleSheets to Mongo
 module.exports.MainCronJob = async () => {
@@ -74,6 +75,13 @@ module.exports.SurveyToGoogleSheetsCron = () => {
     } catch (reason) {
       console.error('Error in cronjob task...', reason)
     }
+  })
+}
+
+module.exports.theWinnerIs = async () => {
+  scheduler.scheduleJob('00 22 14 08 *', async () => {
+    // -- Send the broadcast dialog with the messages of the Quiz
+    await broadcastSender.sendBroadcastMessage('theWinnerIs', 'UNSUBSCRIBED')
   })
 }
 
