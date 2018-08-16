@@ -52,6 +52,6 @@ const TutorRequestSchema = new Schema({
     type: Schema.Types.Boolean,
     required: true,
   },
-}, { collection: 'tutor_request' })
+}, { collection: 'tutor-request' })
 
 module.exports = TutorRequestSchema
