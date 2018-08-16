@@ -84,7 +84,7 @@ module.exports.newQuiz = async () => {
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
     timeOfQuiz = '36 12 16 8 *'
   } else {
-    timeOfQuiz = '0 13 16 8 *'
+    timeOfQuiz = '16 13 16 8 *'
   }
   scheduler.scheduleJob(timeOfQuiz, async () => {
     await broadcastSender.sendBroadcastMessage('thursdayBroadcastQuiz', 'UNSUBSCRIBED')

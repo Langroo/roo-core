@@ -59,18 +59,29 @@ class broadcastSender {
     const broadcastIdsList = []
     for (const creativeId of creativeIdsArray) {
 
-      const creativeData = Object.assign({},
-        {
-          // -- NOTE: The creativeId must be an int
-          message_creative_id: creativeId,
-          notification_type: 'REGULAR',
-          targeting: {
-            labels: {
-              operator: 'NOT',
-              values: [customLabelId],
+      let creativeData
+      if (customLabelId) {
+        creativeData = Object.assign({},
+          {
+            // -- NOTE: The creativeId must be an int
+            message_creative_id: creativeId,
+            notification_type: 'REGULAR',
+            targeting: {
+              labels: {
+                operator: 'NOT',
+                values: [customLabelId],
+              },
             },
-          },
-        })
+          })
+      } else {
+        creativeData = Object.assign({},
+          {
+            // -- NOTE: The creativeId must be an int
+            message_creative_id: creativeId,
+            notification_type: 'REGULAR',
+          })
+      }
+
       // -- Send the message to facebook
       const fromFacebook = await axios.request({
         headers: { 'Content-Type': 'application/json' },
