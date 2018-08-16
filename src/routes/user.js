@@ -663,7 +663,7 @@ router.post('/', async (request, response) => {
       })
 
     const userCache = await redis.hashGetUser(userHash)
-      .catch(err => console.error('ERROR :: Could not retrieve user cache\nLine :: 729'))
+      .catch(() => console.error('ERROR :: Could not retrieve user cache\nLine :: 729'))
 
     // -- Build user schema
     let user = {
