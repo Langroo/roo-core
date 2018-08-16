@@ -117,50 +117,6 @@ router.post('/cache/senderId', async (request, response, next) => {
  * POST
  * To save temporal (key val) data of a user
  * @param userName
- * @param conversationID
- */
-router.post('/cache/conversationId', async (request, response, next) => {
-    /**
-     * Save data in redis
-     */
-  try {
-    // -- Prepare data
-    const userHash = request.body.userHash
-    const conversationId = request.body.conversationId
-    if (!userHash) {
-      throw new Error('Missing parameters')
-    }
-    if (!conversationId) {
-      throw new Error('Missing parameters')
-    }
-
-    const create = await redis.hashSetUser(userHash, 'conversationId', conversationId)
-    if (!create) {
-      throw new Error('Error while creating conversation id')
-    }
-    const retrieve = await redis.hashGetUser(userHash)
-    response.status(201)
-    response.statusMessage = 'created'
-    response.json({
-      statusMessage: response.statusMessage,
-      statusCode: response.statusCode,
-      data: retrieve,
-    })
-  } catch (error) {
-    response.status(500)
-    response.statusMessage = error.toString()
-    response.json({
-      statusMessage: response.statusMessage,
-      statusCode: response.statusCode,
-      data: null,
-    })
-  }
-})
-
-/**
- * POST
- * To save temporal (key val) data of a user
- * @param userName
  * @param level
  */
 router.post('/cache/level', async (request, response, next) => {
@@ -620,9 +576,7 @@ router.get('/:senderId', async (request, response, next) => {
   const userHash = generateHash(senderId)
   console.log('Getting user data [%s]', senderId)
 
-    /**
-     * Retrieve data from mongo db
-     */
+  // -- Get user full profile from Mongo
   try {
     const userMgt = await UsersManagement.retrieve({ query: { senderId }, findOne: true })
     if (!userMgt) {
@@ -635,20 +589,9 @@ router.get('/:senderId', async (request, response, next) => {
 
     if (userMetadata) {
       const getCursor = userCollection.aggregate([
-        {
-          $match: { _id: userMgt._id },
-        },
-        {
-          $lookup: {
-            from: 'user-metadata',
-            localField: '_id',
-            foreignField: '_id',
-            as: 'user-metadata',
-          },
-        },
-        {
-          $unwind: '$user-metadata',
-        },
+        { $match: { _id: userMgt._id } },
+        { $lookup: { from: 'user-metadata', localField: '_id', foreignField: '_id', as: 'user-metadata' } },
+        { $unwind: '$user-metadata' },
         {
           $project: {
             _id: 1,
@@ -657,20 +600,13 @@ router.get('/:senderId', async (request, response, next) => {
             language: 1,
             location: 1,
             payment: 1,
-            content: 1,
             FirstSubscriptionDate: 1,
             subscription: 1,
             senderId: 1,
-            conversationId: 1,
             source_type: '$user-metadata.source_type',
             source_name: '$user-metadata.source_name',
             motivation_to_learn_english: '$user-metadata.motivation_to_learn_english',
             answers_to_content: '$user-metadata.answers_to_content',
-            weekly_lesson_finished: '$user-metadata.weekly_lesson_finished',
-            introduction_finished: '$user-metadata.introduction_finished',
-            daily_story_available: '$user-metadata.daily_story_available',
-            finished_flows: '$user-metadata.finished_flows',
-            last_position: '$user-metadata.last_position',
           },
         },
       ])
@@ -701,9 +637,7 @@ router.post('/', async (request, response) => {
   // -- Prepare data
   const senderId = request.body.senderId
 
-  /**
-   * Do user creation
-   */
+  // -- Create user
   try {
     // -- Check variable integrity
     if (!senderId) {
@@ -734,7 +668,6 @@ router.post('/', async (request, response) => {
     // -- Build user schema
     let user = {
       _id: userHash,
-      conversationId: userCache.conversationId,
       senderId: userCache.senderId,
       name: {
         full_name: `${fbUser.first_name} ${fbUser.last_name}`,
@@ -754,25 +687,12 @@ router.post('/', async (request, response) => {
       payment: {
         status: 'in_debt',
       },
-      content: {
-        current: {
-          lesson: 0,
-          message: 0,
-          until_lesson: 0,
-        },
-        plan: {
-          language: 'english',
-          accent: userCache.accent || 'us',
-          level: userCache.level || 'beginner',
-        },
-      },
       subscription: {
         product: 'FREE CONTENT',
         status: 'ACTIVE',
         weeks_paid: 2,
       },
       FirstSubscriptionDate: new Date().toUserTimezone(fbUser.timezone),
-      scheduleContentTime: userCache.scheduleContentTime || '08:30',
     }
 
     // -- Define the userMetadata object that will be sent
@@ -787,17 +707,11 @@ router.post('/', async (request, response) => {
       exam_studying: userCache.exam_studying || 'Not Provided',
       biggest_interests_personal: userCache.biggest_interests_personal || 'Not Provided',
       favorite_city: userCache.favorite_city || 'Not Provided',
-      available_time_to_study: userCache.available_time_to_study || 'Not Provided',
       internet_speed: userCache.internet_speed || 'Not Provided',
       ad_referral: userCache.ad_referral || 'Not Provided',
       delay_time_between_messages: !isNaN(parseInt(userCache.delay_time_between_messages, 10)) ? parseInt(userCache.delay_time_between_messages, 10) : 1.0,
       response_time: !isNaN(parseInt(userCache.response_time, 10)) ? parseInt(userCache.response_time, 10) : 1.0,
       answers_to_content: userCache.answers_to_content || 'Not Provided',
-      weekly_lesson_finished: false,
-      introduction_finished: true,
-      daily_story_available: true,
-      finished_flows: ['introduction'],
-      last_position: { introduction: 'introFinal' },
     }
 
     // -- Check if user is already registered
@@ -996,7 +910,6 @@ router.post('/pronunciationFile', async (request, response) => {
 router.post('/initRegister', async (request, response) => {
   // -- Prepare data
   const senderId = request.body.senderId
-  const conversationId = request.body.conversationId
 
   /**
    * Do user creation
@@ -1026,7 +939,6 @@ router.post('/initRegister', async (request, response) => {
     // -- Build user schema
     let user = {
       _id: userHash,
-      conversationId,
       senderId,
       name: {
         full_name: `${fbUser.first_name} ${fbUser.last_name}`,
@@ -1079,7 +991,7 @@ router.post('/initRegister', async (request, response) => {
     response.json({ statusMessage: response.statusMessage, statusCode: response.statusCode, data: user })
 
   } catch (error) {
-    slack.notifyError(`Error in getUserPublicInformation()\nFacebook DID not give us the user public profile\nERROR :: ${err}`, 'getUserPublicInformation() in routes/index.js\nLine 979')
+    slack.notifyError(`Error in getUserPublicInformation()\nFacebook DID not give us the user public profile\nERROR :: ${error}`, 'getUserPublicInformation() in routes/index.js\nLine 979')
     response.status(500)
     response.statusMessage = 'User created error'
     console.log('Error creating user after introduction :: ', error)

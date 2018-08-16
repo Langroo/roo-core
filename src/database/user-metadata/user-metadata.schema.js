@@ -18,7 +18,6 @@ require('mongoose-type-email')
  * @param exam_studying
  * @param biggest_interests_personal
  * @param favorite_city
- * @param available_time_to_study
  * @param internet_speed
  * @param ad_referral
  * @param delay_time_between_messages
@@ -74,11 +73,6 @@ const UserMetadataSchema = new Schema({
     required: false,
     default: 'Not Provided',
   },
-  available_time_to_study: {
-    type: Schema.Types.String,
-    required: false,
-    default: 'Not Provided',
-  },
   internet_speed: {
     type: Schema.Types.String,
     required: false,
@@ -104,30 +98,62 @@ const UserMetadataSchema = new Schema({
     required: false,
     default: 'Not Provided',
   },
-  weekly_lesson_finished: {
-    type: Schema.Types.Boolean,
-    required: false,
-    default: false,
-  },
-  daily_story_available: {
-    type: Schema.Types.Boolean,
-    required: false,
-    default: true,
-  },
-  finished_flows: {
-    type: [Schema.Types.String],
-    required: false,
-    default: [String],
-  },
-  last_position: [{
-    type: { type: Schema.Types.String },
-    content: Schema.Types.Mixed,
-    trigger: Schema.Types.String,
-  }],
   rating_value: {
     type: Schema.Types.Number,
     required: false,
     default: 0,
+  },
+  respondNps: {
+    type: Schema.Types.Boolean,
+    default: false,
+  },
+  content: {
+    type: {
+      current: {
+        type: {
+          lesson: {
+            type: Schema.Types.Number,
+            integer: true,
+            required: [true, 'Day number is required'],
+            default: 0,
+          },
+          message: {
+            type: Schema.Types.Number,
+            required: [true, 'Message number is required'],
+            default: 0,
+          },
+          until_lesson: {
+            type: Schema.Types.Number,
+            integer: true,
+            required: [true, 'Until lesson number is required'],
+            default: 0,
+          },
+        },
+        required: [true, 'Content current is required'],
+      },
+      plan: {
+        type: {
+          language: {
+            type: Schema.Types.String,
+            required: [true, 'Language is required'],
+            enum: ['english'],
+            default: 'english',
+          },
+          accent: {
+            type: Schema.Types.String,
+            required: [true, 'Accent is required'],
+            enum: ['us', 'uk'],
+            default: 'us',
+          },
+          level: {
+            type: Schema.Types.String,
+            required: [true, 'Level is required'],
+            enum: ['beginner', 'intermediate', 'advanced'],
+            default: 'beginner',
+          },
+        },
+      },
+    },
   },
 }, { collection: 'user-metadata' })
 
