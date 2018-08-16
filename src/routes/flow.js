@@ -10,15 +10,15 @@ require('dotenv').config()
  * Local depencencies
  */
 const FlowManagment = require('../database/index').FlowManagement
-const flowCollection = mongoose.connection.collection('dialogs')
+const flowCollection = mongoose.connection.collection('dialogues')
 
 /**
- * Store in dialogs model
+ * Store in dialogues model
  */
 
 /**
  * POST
- * To create a new dialogs
+ * To create a new dialogues
  * @param {String} conversation_id
  */
 router.post('/', async (request, response) => {
@@ -147,7 +147,7 @@ router.put('/', async (request, response) => {
 
 /**
  * GET
- * To get an entire dialogs
+ * To get an entire dialogues
  * @param {String} conversation_id
  */
 router.get('/:conversation_id', async (request, response) => {
@@ -177,7 +177,7 @@ router.get('/:conversation_id', async (request, response) => {
 
 /**
  * GET
- * To get an entire dialogs
+ * To get an entire dialogues
  */
 router.get('/', async (request, response) => {
 
@@ -207,7 +207,7 @@ router.get('/', async (request, response) => {
 
 /**
  * DELETE
- * To delete an entire dialogs
+ * To delete an entire dialogues
  * @param {String} conversation_id
  */
 router.delete('/:conversation_id', async (request, response) => {

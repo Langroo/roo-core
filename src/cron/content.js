@@ -14,7 +14,7 @@ util.promisify(String.prototype.split)
 /**
  * LOCAL dependencies
  */
-const basicSender = require('../dialogs/dialogs-builder').basicSender
+const basicSender = require('../dialogues/dialogues-builder').basicSender
 const redis = require('../cache/index')
 
 /**
@@ -419,7 +419,7 @@ class ContentSystem {
         } while (content)
 
         if (nextCanBePause) {
-          // -- Stop the dialogs with awaiting answer
+          // -- Stop the dialogues with awaiting answer
           await redis.hashSetUser(user._id, 'prev_flow', 'content')
           await redis.hashSetUser(user._id, 'current_flow', 'content')
           await redis.hashSetUser(user._id, 'awaiting_answer', '1')

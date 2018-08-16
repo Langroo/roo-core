@@ -1,4 +1,4 @@
 module.exports = {
-  dialogsBuilder: require('./dialogs-builder'),
-  dialogsContent: require('./dialogs-content'),
+  dialoguesBuilder: require('./dialogues-builder'),
+  dialoguesContent: require('./dialogues-content'),
 }

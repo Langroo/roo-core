@@ -1,4 +1,4 @@
-const dialogsMessages = {
+const dialoguesMessages = {
   replies: {
     initBroadcastMessage: [
       { type: 'text', content: 'A big hello from all the team at Langroo!! 👋' },
@@ -57,4 +57,4 @@ const dialogsMessages = {
   },
 }
 
-module.exports = dialogsMessages
+module.exports = dialoguesMessages

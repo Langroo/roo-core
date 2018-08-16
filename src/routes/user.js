@@ -7,7 +7,7 @@ const router = express.Router()
 const cronjobScheduler = require('node-schedule')
 const crypto = require('crypto')
 const slack = require('../general/index').slack
-const basicSender = require('../dialogs/dialogs-builder').basicSender
+const basicSender = require('../dialogues/dialogues-builder').basicSender
 require('dotenv').config()
 
 /**

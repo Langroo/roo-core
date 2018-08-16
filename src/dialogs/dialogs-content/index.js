@@ -1,1 +1,1 @@
-module.exports.dialogsContent = require('./dialogs-messages')
+module.exports.dialoguesContent = require('./dialogues-messages')

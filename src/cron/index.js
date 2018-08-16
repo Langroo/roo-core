@@ -4,7 +4,7 @@ const CRM = require('../APIs/google/crm.management')
 const SheetsToMongo = require('./sheets-to-mongo')
 const UserActions = require('./user-actions')
 const apiCalls = require('../APIs/facebook/index').apiCalls
-const broadcastSender = require('../dialogs/dialogs-builder').broadcastSender
+const broadcastSender = require('../dialogues/dialogues-builder').broadcastSender
 
 // -- Main scheduled job that updates the profile and parses GoogleSheets to Mongo
 module.exports.MainCronJob = async () => {
