@@ -116,10 +116,14 @@ class CRM {
         tutor_requested: user.tutor_request ? 'Yes' : 'No',
       })
 
-      if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') console.info('New profile data stored in GoogleSheets for user :: [%s]', user.name.full_name)
+      if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
+        console.info('New profile data stored in GoogleSheets for user :: [%s]', user.name.full_name)
+      }
 
     } catch (error) {
-      if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') console.error('Error saving the new user data on GoogleSheets CRM [Profile]')
+      if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
+        console.error('Error saving the new user data on GoogleSheets CRM [Profile]')
+      }
       if (error) {
         console.error('Reason [%s]', error.message)
       } else {

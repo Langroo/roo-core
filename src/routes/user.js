@@ -13,8 +13,7 @@ require('dotenv').config()
 /**
  * Local depencencies
  */
-const ContentSystem = require('../cron/content')
-const FacebookUsers = require('../APIs/facebook/index').users
+const FacebookUsers = require('../APIs/facebook').users
 const CRM = require('../APIs/google/crm.management')
 
 /**
@@ -313,33 +312,6 @@ router.get('/cache/:userHash', async (request, response, next) => {
 /**
  * MONGO DB Functions
  */
-
-/**
- * PUT
- * User wrote [on demand content based]
- * @param conversation_id
- */
-router.put('/wrote', async (request, response) => {
-  try {
-    // -- Prepare data
-    const senderId = request.body.senderId
-    if (!senderId) {
-      throw new Error('ಠ_ಠ {senderId} not properly setup')
-    }
-    const userHash = generateHash(senderId)
-    const senderWeekResult = await ContentSystem.senderWeek(userHash)
-      .catch(err => {
-        console.error('Massive ERROR at /wrote after calling ContentSystem.senderWeek :: ', err)
-        throw new Error(err)
-      })
-    response.status(senderWeekResult.statusCode)
-    response.json({ statusMessage: response.statusMessage, statusCode: response.statusCode, data: null })
-  } catch (reason) {
-    console.log('ERROR :: (╯°□°）╯︵ ┻━┻ IN /user/wrote 👇\n', reason)
-    response.status(500)
-    response.json({ statusMessage: reason, statusCode: response.statusCode, data: null })
-  }
-})
 
 /**
  * PUT
@@ -746,11 +718,11 @@ router.post('/', async (request, response) => {
     await CRM.addNewProfileRecord(senderId)
 
     // -- Remove user from the UNREGISTERED LABEL
-    await facebookApi.removeUserFromLabel(senderId, 'UNREGISTERED')
+    await facebookApi.messaging.removeUserFromLabel(senderId, 'UNREGISTERED')
       .catch(err => console.log(err))
 
     // -- Assign the user to the label
-    await facebookApi.assignUserToLabel(senderId, 'ACTIVE')
+    await facebookApi.messaging.assignUserToLabel(senderId, 'ACTIVE')
       .catch(err => console.log(err))
 
     // -- Return created user
@@ -819,11 +791,11 @@ router.put('/', async (request, response) => {
     console.info('✔ User subscription data deletion COMPLETE ✔')
 
     // -- Remove the user from the last Status Label he had
-    await facebookApi.removeUserFromLabel(senderId, previousStatus)
+    await facebookApi.messaging.removeUserFromLabel(senderId, previousStatus)
       .catch(err => console.log(err))
 
     // -- Assign the user to the label
-    await facebookApi.assignUserToLabel(senderId, 'UNSUBSCRIBED')
+    await facebookApi.messaging.assignUserToLabel(senderId, 'UNSUBSCRIBED')
       .catch(err => console.log(err))
 
     response.status(201)
@@ -982,7 +954,7 @@ router.post('/initRegister', async (request, response) => {
     }
 
     // -- Assign the user to the label
-    await facebookApi.assignUserToLabel(senderId, 'UNREGISTERED')
+    await facebookApi.messaging.assignUserToLabel(senderId, 'UNREGISTERED')
       .catch(err => console.log(err))
 
     // -- Return created user
