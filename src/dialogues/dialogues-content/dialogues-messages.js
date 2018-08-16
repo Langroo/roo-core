@@ -1,15 +1,11 @@
 const dialoguesMessages = {
   replies: {
     theWinnerIs: [
-      { type: 'text', content: 'Here our today\'s results:' },
-      { type: 'text', content: 'ANSWER 📕:\n{{answer}}' },
-      { type: 'text', content: 'TODAY\'S WINNER 🏆' },
-      { type: 'text', content: '{{winner}} from {{country}}!!!' },
-      {
-        type: 'text',
-        content: '{{winner}} will now receive a free 15 minute class with one of our English tutors! 🙋',
-      },
-      { type: 'text', content: 'See you on Wednesday!' },
+      { type: 'text', content: 'Today\'s Results are Just In!! 📢' },
+      { type: 'text', content: 'ANSWER 📕: A scone!' },
+      { type: 'text', content: 'WINNER 🏆:\nLorena González from Madrid 🇪' },
+      { type: 'text', content: 'Lorena will now get a FREE 20 minute English class! 🙋' },
+      { type: 'text', content: 'Join us tomorrow at 3pm (London Time) to have the chance to win! 😄' },
     ],
     thursdayBroadcastQuiz: [
       { type: 'text', content: 'A big hello from all the team at Langroo!! 👋' },
