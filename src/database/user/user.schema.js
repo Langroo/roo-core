@@ -6,33 +6,11 @@ const Schema = mongoose.Schema
 const IntegerValidator = require('mongoose-integer')
 require('mongoose-type-email')
 
-/**
- * User Schema
- * @param _id => FB User identifier
- * @param name => Complete name
- * @param profile_link => Link to the profile
- * @param age => Age
- * @param birthday => Birthday
- * @param email => Email
- * @param gender => Gender
- * @param language => Language
- * @param location => User's location
- * @param devices => Devices
- * @param education => Education (Schools and Colleges)
- * @param artists => Favorite Artists
- * @param games => Favorite Games
- * @param payment => Payment related information
- * @param content => Content Schedule
- */
 const UserSchema = new Schema({
   _id: {
     type: Schema.Types.String,
     required: [true, 'ID is required'],
     unique: true,
-  },
-  conversationId: {
-    type: Schema.Types.String,
-    default: null,
   },
   senderId: {
     type: Schema.Types.String,
@@ -114,53 +92,6 @@ const UserSchema = new Schema({
     },
     required: [false, 'Location is required'],
   },
-  devices: {
-    type: [{
-      os: {
-        type: Schema.Types.String,
-        default: null,
-      },
-      hardware: {
-        type: Schema.Types.String,
-        default: null,
-      },
-    }],
-    required: false,
-  },
-  education: {
-    type: [{
-      id: {
-        type: Schema.Types.String,
-        required: [true, 'Education ID is required'],
-      },
-      type: {
-        type: Schema.Types.String,
-        required: [true, 'Education type is required'],
-      },
-      school: {
-        type: {
-          id: {
-            type: Schema.Types.String,
-            required: [true, 'School ID is required'],
-          },
-          name: {
-            type: Schema.Types.String,
-            required: [true, 'School Name is required'],
-          },
-          link: {
-            type: Schema.Types.String,
-            required: [true, 'School page link is required'],
-          },
-          picture: {
-            type: Schema.Types.String,
-            required: [true, 'School picture is required'],
-          },
-        },
-        required: [true, 'Education School is required'],
-      },
-    }],
-    required: false,
-  },
   payment: {
     type: {
       status: {
@@ -171,54 +102,6 @@ const UserSchema = new Schema({
       },
     },
     required: [true, 'Payment is required'],
-  },
-  content: {
-    type: {
-      current: {
-        type: {
-          lesson: {
-            type: Schema.Types.Number,
-            integer: true,
-            required: [true, 'Day number is required'],
-            default: 0,
-          },
-          message: {
-            type: Schema.Types.Number,
-            required: [true, 'Message number is required'],
-            default: 0,
-          },
-          until_lesson: {
-            type: Schema.Types.Number,
-            integer: true,
-            required: [true, 'Until lesson number is required'],
-            default: 0,
-          },
-        },
-        required: [true, 'Content current is required'],
-      },
-      plan: {
-        type: {
-          language: {
-            type: Schema.Types.String,
-            required: [true, 'Language is required'],
-            enum: ['english'],
-            default: 'english',
-          },
-          accent: {
-            type: Schema.Types.String,
-            required: [true, 'Accent is required'],
-            enum: ['us', 'uk'],
-            default: 'us',
-          },
-          level: {
-            type: Schema.Types.String,
-            required: [true, 'Level is required'],
-            enum: ['beginner', 'intermediate', 'advanced'],
-            default: 'beginner',
-          },
-        },
-      },
-    },
   },
   subscription: {
     type: {
@@ -254,10 +137,10 @@ const UserSchema = new Schema({
     type: Schema.Types.Date,
     default: new Date(),
   },
-  respondNps: {
-    type: Schema.Types.Boolean,
-    default: false
-  }
+  is_admin: {
+    type: Schema.Types.String,
+    default: false,
+  },
 }, { collection: 'user' })
 
 /**

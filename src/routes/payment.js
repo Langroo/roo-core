@@ -153,7 +153,7 @@ router.get('/success', async (request, response) => {
       method: 'post',
       data: '{"text":"A user payment has been registered successfully in Stripe."}',
     })
-    console.log('User initiated payment dialogs')
+    console.log('User initiated payment dialogues')
   } catch (reason) {
     console.log('(╯°□°）╯︵ ┻━┻ ERROR sending the notification to SLACK :: ', reason)
   }

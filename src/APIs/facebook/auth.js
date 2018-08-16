@@ -10,14 +10,14 @@ const generateHash = (str) => crypto.createHash('md5').update(str).digest('hex')
  * Local dependencies
  */
 const facebookAuth = require('./credentials/token')
-const flowCollection = mongoose.connection.collection('dialogs')
+const flowCollection = mongoose.connection.collection('dialogues')
 const LoginManagement = require('../../database/index').LoginManagement
 const UsersManagement = require('../../database/index').UsersManagement
 const FacebookUsers = require('./users')
 const googlesheet = require('../google/index')
 const redis = require('../../cache/index')
-const Messages = require('../../dialogs/dialogs-content').dialogsContent
-const basicSender = require('../../dialogs/dialogs-builder').basicSender
+const Messages = require('../../dialogues/dialogues-content').dialoguesContent
+const basicSender = require('../../dialogues/dialogues-builder').basicSender
 const maps = require('../../general/index').maps
 
 module.exports = function (passport) {
@@ -104,10 +104,10 @@ module.exports = function (passport) {
             console.log('User Re-SubscriptionDate :: [ %s ]', new Date().toUserTimezone(user.location.timezone).toString())
           }
 
-          // -- Update user dialogs
+          // -- Update user dialogues
           await flowCollection.findOneAndUpdate({ conversation_id: user.senderId }, { $set: { open_question: true } }, { new: true })
 
-          // -- Send messages for final dialogs when user subscribes again to Langroo
+          // -- Send messages for final dialogues when user subscribes again to Langroo
           messageBuilder = new basicSender(user.senderId)
           await messageBuilder.sendMessages(Messages.firstSubscribeLangroo.map(message => {
             // -- Personalize alternative messages
@@ -338,7 +338,7 @@ module.exports = function (passport) {
             findOne: true,
           })
 
-          // -- Update user dialogs
+          // -- Update user dialogues
           await flowCollection.findOneAndUpdate({ conversation_id: user.senderId }, { $set: { open_question: true } }, { new: true })
 
           messageBuilder = new basicSender(user.senderId, user.conversationId)

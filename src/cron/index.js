@@ -4,7 +4,8 @@ const CRM = require('../APIs/google/crm.management')
 const SheetsToMongo = require('./sheets-to-mongo')
 const UserActions = require('./user-actions')
 const apiCalls = require('../APIs/facebook/index').apiCalls
-const broadcastSender = require('../dialogs/dialogs-builder').broadcastSender
+const broadcastSender = require('../dialogues/dialogues-builder').broadcastSender
+const broadcastQuizTools = require('../general').broadcastQuiz
 
 // -- Main scheduled job that updates the profile and parses GoogleSheets to Mongo
 module.exports.MainCronJob = async () => {
@@ -79,9 +80,16 @@ module.exports.SurveyToGoogleSheetsCron = () => {
 }
 
 module.exports.newQuiz = async () => {
-  scheduler.scheduleJob('15 17 15 08 *', async () => {
-    await broadcastSender.sendBroadcastMessage('initBroadcastMessage', 'UNSUBSCRIBED')
-    await broadcastSender.sendBroadcastMessage('wednesdayBroadcastQuiz', 'UNSUBSCRIBED')
+  let timeOfQuiz
+  if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
+    timeOfQuiz = '36 12 16 8 *'
+  } else {
+    timeOfQuiz = '0 13 16 8 *'
+  }
+  scheduler.scheduleJob(timeOfQuiz, async () => {
+    await broadcastSender.sendBroadcastMessage('thursdayBroadcastQuiz', 'UNSUBSCRIBED')
+    broadcastQuizTools.setContextInBot()
+      .catch(() => console.log('An error occurred setting the users awaiting_answer parameter to 1 for the quiz answer'))
   })
 }
 
