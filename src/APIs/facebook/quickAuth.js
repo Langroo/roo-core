@@ -17,13 +17,13 @@ const generateHash = (str) => crypto.createHash('md5').update(str).digest("hex")
  * Local dependencies
  */
 const facebookAuth = require('./credentials/token');
-const flowCollection = mongoose.connection.collection('dialogs')
+const flowCollection = mongoose.connection.collection('dialogues')
 const LoginManagement = require('../../database/index').LoginManagement
 const UsersManagement = require('../../database/index').UsersManagement
 const FacebookUsers = require('./users');
 const googlesheet = require('../google/index')
 const redis = require('../../cache/index')
-const basicSender = require('../../dialogs/dialogs-builder').basicSender
+const basicSender = require('../../dialogues/dialogues-builder').basicSender
 const maps = require('../../general/index').maps
 
 module.exports = (passport) => {
@@ -97,10 +97,10 @@ module.exports = (passport) => {
 
           if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') console.log("User Re-SubscriptionDate :: [ %s ]", new Date().toUserTimezone(user.location.timezone).toString());
 
-          //-- Update user dialogs
+          //-- Update user dialogues
           await flowCollection.findOneAndUpdate({ conversation_id:user.senderId }, { $set: { "open_question": true } }, { new: true });
 
-          //-- Send messages for final dialogs when user subscribes again to Langroo
+          //-- Send messages for final dialogues when user subscribes again to Langroo
           messageBuilder = new MessageBuilderAPI(user.senderId, user.conversationId)
           await messageBuilder.sendMessages(Messages.quickRegister.map(message => {
             //-- Personalize alternative messages
@@ -319,7 +319,7 @@ module.exports = (passport) => {
             findOne: true
           });
 
-          //-- Update user dialogs
+          //-- Update user dialogues
           await flowCollection.findOneAndUpdate({ conversation_id:user.senderId }, { $set: { "open_question": true } }, { new: true });
 
           messageBuilder = new MessageBuilderAPI(user.senderId, user.conversationId)

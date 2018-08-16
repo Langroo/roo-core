@@ -1,5 +1,5 @@
 const templates = require('./templates')
-const dialogsContent = require('../dialogs-content').dialogsContent
+const dialoguesContent = require('../dialogues-content').dialoguesContent
 const axios = require('axios')
 
 class broadcastSender {
@@ -25,7 +25,7 @@ class broadcastSender {
   static async prepareCreativeIdsArray (dialogName) {
     // -- The Dialog is an array of messages
     // -- We get the Dialog and assign it to a messages array
-    const messagesArray = dialogsContent.messages[dialogName]
+    const messagesArray = dialoguesContent.messages[dialogName]
     const IdsArray = []
     // -- Fill the array with the Ids of the BroadCast Messages
     for (const message of messagesArray) {

@@ -1,12 +1,12 @@
 const remindersManagement = require('../database/index').RemindersManagement
 const usersManagement = require('../database/index').UsersManagement
 const moment = require('moment')
-const basicSender = require('../dialogs/dialogs-builder').basicSender
+const basicSender = require('../dialogues/dialogues-builder').basicSender
 const redis = require('../cache/index')
 const nodeScheduler = require('node-schedule')
 const mongoose = require('mongoose')
 const remindersCollection = mongoose.connection.collection('reminders')
-const dialogs = require('../dialogs/dialogs-content').dialogsContent
+const dialogues = require('../dialogues/dialogues-content').dialoguesContent
 const asyncForEach = require('eachasync')
 
 class remindersFunctions {
@@ -84,7 +84,7 @@ class remindersFunctions {
     const reminderData = await reminderCursor.next()
 
     // -- retrieve the dialog to send which is an array of arrays of objects: [ [{message1}], [{message2}], ..., [{messageN}]]
-    const dialogToSend = dialogs(reminderData.message, reminderData.name.first_name)
+    const dialogToSend = dialogues(reminderData.message, reminderData.name.first_name)
 
     // -- Define the variables we will need for cronjobs creation and destruction
     let cronId
@@ -127,7 +127,7 @@ class remindersFunctions {
     await Object.keys(flowObject).forEachAsync(async(name) => {
       const value = flowObject[name]
       await redis.hashSetUser(userHash, name, value)
-        .catch(e => console.error('Error updating user dialogs :: ', e))
+        .catch(e => console.error('Error updating user dialogues :: ', e))
     })
   }
 

@@ -3,7 +3,7 @@
  */
 const ContentManagement = require('../database/index').ContentManagement
 const googlesheet = require('../APIs/google')
-const basicSender = require('../dialogs/dialogs-builder').basicSender
+const basicSender = require('../dialogues/dialogues-builder').basicSender
 
 /**
  * Content instances

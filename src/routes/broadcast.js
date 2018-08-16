@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const broadcastSender = require('../dialogs/dialogs-builder').broadcastSender
+const broadcastSender = require('../dialogues/dialogues-builder').broadcastSender
 const broadcastQuizTools = require('../general').broadcastQuiz
 
 router.post('/', async (request, response) => {
