@@ -98,7 +98,6 @@ Promise.all([MongoDB, Redis])
   })
 
   await cronServices.newQuiz()
-  await cronServices.theWinnerIs()
   cronServices.UpdateLastInteractionCron()
   cronServices.LabelCreationCron()
   await cronServices.MainCronJob()
