@@ -138,7 +138,7 @@ const UserSchema = new Schema({
     default: new Date(),
   },
   is_admin: {
-    type: Schema.Types.String,
+    type: Schema.Types.Boolean,
     default: false,
   },
 }, { collection: 'user' })
