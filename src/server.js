@@ -97,16 +97,13 @@ Promise.all([MongoDB, Redis])
     })
   })
 
-  /*  cronServices.messagesMaintenance()
-    cronServices.newQuiz()
-    cronServices.theWinnerIs()
-    cronServices.UpdateLastInteractionCron()
-    cronServices.LabelCreationCron()
-    await cronServices.MainCronJob()
-    cronServices.SurveyToGoogleSheetsCron()*/
-  const dialoguesContent = require('./dialogues/dialogues-content').dialoguesContent
-  const messagesArray = await dialoguesContent.messages.fridayBroadcastQuiz
-  console.log('show Me the message', messagesArray)
+  cronServices.messagesMaintenance()
+  cronServices.newQuiz()
+  cronServices.theWinnerIs()
+  cronServices.UpdateLastInteractionCron()
+  cronServices.LabelCreationCron()
+  await cronServices.MainCronJob()
+  cronServices.SurveyToGoogleSheetsCron()
 })
 .catch(reason => {
   slack.notifyError(reason, 'server.js')
