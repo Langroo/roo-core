@@ -6,6 +6,21 @@ const UserActions = require('./user-actions')
 const apiCalls = require('../APIs/facebook/index').apiCalls
 const broadcastSender = require('../dialogues/dialogues-builder').broadcastSender
 const broadcastQuizTools = require('../general').broadcastQuiz
+const messagesManagement = require('../database/messages').management
+
+// -- Check if the messages collection is created
+module.exports.messagesMaintenance = () => {
+  const messagesExist = messagesManagement.retrieve()
+  if (messagesExist.length === 0) {
+    const newMessage = {
+      name: 'helloWorld',
+      message: '{ type: \'text\', content: \'Hello World!\'}',
+      type: 'text',
+      category: 'reply',
+    }
+    messagesManagement.create(newMessage)
+  }
+}
 
 // -- Main scheduled job that updates the profile and parses GoogleSheets to Mongo
 module.exports.MainCronJob = async () => {
