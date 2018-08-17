@@ -9,8 +9,8 @@ const broadcastQuizTools = require('../general').broadcastQuiz
 const messagesManagement = require('../database/messages').management
 
 // -- Check if the messages collection is created
-module.exports.messagesMaintenance = () => {
-  const messagesExist = messagesManagement.retrieve()
+module.exports.messagesMaintenance = async () => {
+  const messagesExist = await messagesManagement.retrieve()
   if (messagesExist.length === 0) {
     const newMessage = {
       name: 'helloWorld',
