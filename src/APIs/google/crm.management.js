@@ -431,14 +431,13 @@ class CRM {
           $unwind: '$user',
         },
       ])
-      let tutorRequest
+      let tutorRequest = await tutorRequestsCursor.next()
 
-      if (!tutorRequestsCursor) {
+      if (!tutorRequest) {
         throw new Error({ message: 'No tutor requests to store found' })
       }
 
       let buffer = 0
-      tutorRequest = await tutorRequestsCursor.next()
       do {
         if (buffer === bufferSize) {
           await messageTimer(timeBetweenRequests)
@@ -466,12 +465,11 @@ class CRM {
       console.info('Number of tutor requests successfully downloaded to GoogleSheets :: [%s]', successfullySaved)
 
     } catch (error) {
-      console.error('An error occurred while saving TUTOR REQUESTS data on GoogleSheets CRM [Profile]')
       console.info('Number of tutor requests successfully downloaded to GoogleSheets before the error :: [%s]', successfullySaved)
       if (error.message) {
-        console.error('Reason [%s]', error.message)
+        console.error('Events during tutor saving: [%s]', error.message)
       } else {
-        console.error('Reason [%s]', error)
+        console.error('Events during tutor saving: [%s]', error)
       }
     }
   }

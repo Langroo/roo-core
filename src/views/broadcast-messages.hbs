@@ -1,8 +1,11 @@
 <div class="jumbotron">
-    <p>Broadcast administration Page</p>
+    <p class="lead">Broadcast administration Page</p>
+    <p class="label-info">Available messages</p>
+    <ul class="list-group">
     {{# each messagesList as |val key|}}
-        {{ key }}: {{ val }}
+        <li class="list-group-item">{{ val.name }}: {{ val.message }}</li>
     {{/each}}
+    </ul>
 </div>
 <div class="page-footer">
     <div class="container">
