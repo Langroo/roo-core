@@ -12,7 +12,7 @@ const Schema = mongoose.Schema
 const messagesSchema = new Schema({
     position_in_dialogue: { type: Schema.Types.String, default: '0' },
     dialogue_name: { type: Schema.Types.String, default: 'HelloWorld' },
-    message: { type: Schema.Types.String, required: false, default: '{ type: \'text\', content: \'Hello World!\' }' },
+    content: { type: Schema.Types.String, required: false, default: 'Hello World!' },
     type: { type: Schema.Types.String, required: false, default: 'text' },
     category: { type: Schema.Types.String, required: false, default: 'reply' },
   },

@@ -11,7 +11,11 @@ const dialoguesMessages = {
 
     // -- Fill the formattedReplies objects with an array of objects
     for (const msgs of arrayFromDB) {
-      formattedReplies[msgs.dialogue_name].splice(parseInt(msgs.position_in_dialogue, 10), 0, msgs.message)
+      formattedReplies[msgs.dialogue_name]
+        .splice(
+          parseInt(msgs.position_in_dialogue, 10),
+          0,
+          { type: msgs.type, content: msgs.content })
     }
 
     return formattedReplies

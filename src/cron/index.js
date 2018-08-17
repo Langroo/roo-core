@@ -15,7 +15,7 @@ module.exports.messagesMaintenance = async () => {
     const newMessage = {
       position_in_dialogue: '0',
       dialogue_name: 'helloWorld',
-      message: '{ type: \'text\', content: \'Hello World!\'}',
+      content: 'Hello World!',
       type: 'text',
       category: 'reply',
     }
