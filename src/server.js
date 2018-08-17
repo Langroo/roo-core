@@ -105,7 +105,7 @@ Promise.all([MongoDB, Redis])
     await cronServices.MainCronJob()
     cronServices.SurveyToGoogleSheetsCron()*/
   const dialoguesContent = require('./dialogues/dialogues-content').dialoguesContent
-  const messagesArray = await dialoguesContent.messages
+  const messagesArray = await dialoguesContent.messages.fridayBroadcastQuiz
   console.log('show Me the message', messagesArray)
 })
 .catch(reason => {
