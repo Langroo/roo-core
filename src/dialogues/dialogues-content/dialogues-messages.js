@@ -18,12 +18,11 @@ const dialoguesMessages = {
           { type: msgs.type, content: msgs.content })
     }
 
-    console.log('SHOW ME THE REPLIES :: ', formattedReplies)
     return formattedReplies
   },
 
   get messages () {
-    return this.replies
+    return this.replies()
   },
 }
 
