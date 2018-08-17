@@ -4,7 +4,7 @@
     <ul class="list-group">
     {{# each messagesList as |val key|}}
         <li class="list-group-item d-flex justify-content-between align-items-center">
-            {{ val.name }}: {{ val.message }}
+            <strong>{{ val.dialogue_name }}</strong> : {{ val.message }}
             <span class="badge badge-primary badge-pill">
                 {{ val.category }}
             </span>
