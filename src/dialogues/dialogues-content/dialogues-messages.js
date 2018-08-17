@@ -8,7 +8,7 @@ const dialoguesMessages = {
       { type: 'text', content: 'Mirella will now get a FREE 20 minute English class! 🙋' },
       { type: 'text', content: 'The next quiz will be on Monday at 3pm - London Time!' },
       { type: 'text', content: 'Have a great weekend! 💪' },
-      { type: 'text', content: 'https://www.youtube.com/watch?v=KtBbyglq37E' },
+      { type: 'image', content: 'https://i.pinimg.com/originals/6e/80/02/6e80029217a7f79ce1e951048baeadc8.jpg' },
     ],
     wednesdayBroadcastQuiz: [
       { type: 'text', content: 'This is the wednesday broadcast quiz!' },
