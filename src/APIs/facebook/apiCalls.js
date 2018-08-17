@@ -24,6 +24,9 @@ class messaging {
       url: `${process.env.FB_BASE_URL}/${process.env.FB_VERSION}/${labelId}/label?user=${senderId}access_token=${process.env.FB_ACCESS_TOKEN}`,
       method: 'delete',
     })
+      .catch(error => {
+        console.log('Error removing USER from LABEL in FACEBOOK ::\n', error.response.data)
+      })
   }
 
   static async assignUserToLabel (senderId, LabelName) {
@@ -42,6 +45,9 @@ class messaging {
       method: 'post',
       data: `{"user":${senderId}}`,
     })
+      .catch(error => {
+        console.log('Error assigning USER to LABEL in FACEBOOK ::\n', error.response.data)
+      })
   }
 
   static async asyncForEach (array, callback) {

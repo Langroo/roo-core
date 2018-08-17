@@ -4,6 +4,7 @@
 const mongoose = require('mongoose')
 const redis = require('../cache/index')
 const cronjobScheduler = require('node-schedule')
+const facebookAPI = require('../APIs/facebook').apiCalls
 
 const UsersManagement = require('../database/index').UsersManagement
 const scheduleCollection = mongoose.connection.collection('schedule')
@@ -69,8 +70,10 @@ class UserActions {
       try {
         if (Date.daysBetween(lastDateUserMessaged, actual) > 7 && Date.daysBetween(lastInteraction, actual) <= 7) {
           await UsersManagement.findAndUpdate({ _id: user._id }, { 'subscription.status': 'ACTIVE' })
+          await facebookAPI.messaging.assignUserToLabel(user.senderId, 'ACTIVE')
         } else if (Date.daysBetween(lastDateUserMessaged, actual) > 7 && Date.daysBetween(lastInteraction, actual) > 7) {
           await UsersManagement.findAndUpdate({ _id: user._id }, { 'subscription.status': 'INACTIVE' })
+          await facebookAPI.messaging.assignUserToLabel(user.senderId, 'INACTIVE')
         }
 
       } catch (error) {

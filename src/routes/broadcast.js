@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const broadcastSender = require('../dialogues/dialogues-builder').broadcastSender
 const broadcastQuizTools = require('../general').broadcastQuiz
+const messagesManagement = require('../database/messages').management
 
 router.post('/', async (request, response) => {
   try {
@@ -26,4 +27,17 @@ router.post('/', async (request, response) => {
   }
 })
 
+router.get('/broadcast-messages', async (request, response) => {
+  messagesManagement.retrieve()
+    .then(messagesList => {
+      response.status(200)
+      return response.render('broadcast-messages', { messagesList })
+    })
+    .catch(err => {
+      console.log('Error :: ', err)
+      response.status(204)
+      return response.render('broadcast-messages', { messagesList: [] })
+    })
+
+})
 module.exports = router

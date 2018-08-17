@@ -1,12 +1,6 @@
-/**
- * Global dependencies
- */
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-/**
- * TutorRequest Schema
- */
 const TutorRequestSchema = new Schema({
   user_id: {
     type: Schema.Types.String,

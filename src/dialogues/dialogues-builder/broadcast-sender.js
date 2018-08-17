@@ -25,7 +25,7 @@ class broadcastSender {
   static async prepareCreativeIdsArray (dialogName) {
     // -- The Dialog is an array of messages
     // -- We get the Dialog and assign it to a messages array
-    const messagesArray = dialoguesContent.messages[dialogName]
+    const messagesArray = await dialoguesContent.messages[dialogName]
     const IdsArray = []
     // -- Fill the array with the Ids of the BroadCast Messages
     for (const message of messagesArray) {

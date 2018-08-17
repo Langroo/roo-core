@@ -6,6 +6,22 @@ const UserActions = require('./user-actions')
 const apiCalls = require('../APIs/facebook/index').apiCalls
 const broadcastSender = require('../dialogues/dialogues-builder').broadcastSender
 const broadcastQuizTools = require('../general').broadcastQuiz
+const messagesManagement = require('../database/messages').management
+
+// -- Check if the messages collection is created
+module.exports.messagesMaintenance = async () => {
+  const messagesExist = await messagesManagement.retrieve()
+  if (messagesExist.length === 0) {
+    const newMessage = {
+      position_in_dialogue: '0',
+      dialogue_name: 'helloWorld',
+      content: 'Hello World!',
+      type: 'text',
+      category: 'reply',
+    }
+    messagesManagement.create(newMessage)
+  }
+}
 
 // -- Main scheduled job that updates the profile and parses GoogleSheets to Mongo
 module.exports.MainCronJob = async () => {
@@ -82,12 +98,12 @@ module.exports.SurveyToGoogleSheetsCron = () => {
 module.exports.newQuiz = async () => {
   let timeOfQuiz
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
-    timeOfQuiz = '36 12 16 8 *'
+    timeOfQuiz = '2 14 * * 5'
   } else {
-    timeOfQuiz = '16 13 16 8 *'
+    timeOfQuiz = '6 14 * * 5'
   }
   scheduler.scheduleJob(timeOfQuiz, async () => {
-    await broadcastSender.sendBroadcastMessage('thursdayBroadcastQuiz', 'UNSUBSCRIBED')
+    await broadcastSender.sendBroadcastMessage('fridayBroadcastQuiz', 'UNSUBSCRIBED')
     broadcastQuizTools.setContextInBot()
       .catch(() => console.log('An error occurred setting the users awaiting_answer parameter to 1 for the quiz answer'))
   })
