@@ -13,7 +13,8 @@ module.exports.messagesMaintenance = async () => {
   const messagesExist = await messagesManagement.retrieve()
   if (messagesExist.length === 0) {
     const newMessage = {
-      name: 'helloWorld',
+      position_in_dialogue: '0',
+      dialogue_name: 'helloWorld',
       message: '{ type: \'text\', content: \'Hello World!\'}',
       type: 'text',
       category: 'reply',

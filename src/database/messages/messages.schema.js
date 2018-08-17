@@ -10,7 +10,8 @@ const Schema = mongoose.Schema
 * @category: reply, broadcast, content
 * */
 const messagesSchema = new Schema({
-    name: { type: Schema.Types.String, default: 'unnamed' },
+    position_in_dialogue: { type: Schema.Types.String, default: '0' },
+    dialogue_name: { type: Schema.Types.String, default: 'HelloWorld' },
     message: { type: Schema.Types.String, required: false, default: '{ type: \'text\', content: \'Hello World!\' }' },
     type: { type: Schema.Types.String, required: false, default: 'text' },
     category: { type: Schema.Types.String, required: false, default: 'reply' },

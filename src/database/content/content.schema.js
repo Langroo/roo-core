@@ -22,7 +22,7 @@ const ContentSchema = new Schema({
   type: {
     type: Schema.Types.String,
     required: [true, 'Type is required'],
-    enum: ['week', 'saturday', 'sunday']
+    enum: ['week', 'saturday', 'sunday'],
   },
   message_id: {
     type: Schema.Types.Number,
@@ -34,8 +34,8 @@ const ContentSchema = new Schema({
   },
   pause: {
     type: Schema.Types.Boolean,
-    default: false
-  }
+    default: false,
+  },
 }, { collection: 'content' })
 
 /**
