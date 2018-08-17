@@ -1,6 +1,15 @@
 const messagesManagement = require('../../database/messages').management
 const dialoguesMessages = {
   replies: {
+    theWinnerIs: [
+      { type: 'text', content: 'Today\'s Results!! 📢' },
+      { type: 'text', content: 'ANSWER 📕: "I Put On My Makeup"' },
+      { type: 'text', content: 'WINNER 🏆:\nMirella Dagher from France 🇫🇷' },
+      { type: 'text', content: 'Mirella will now get a FREE 20 minute English class! 🙋' },
+      { type: 'text', content: 'The next quiz will be on Monday at 3pm - London Time!' },
+      { type: 'text', content: 'Have a great weekend! 💪' },
+      { type: 'image', content: 'https://i.pinimg.com/originals/6e/80/02/6e80029217a7f79ce1e951048baeadc8.jpg' },
+    ],
     wednesdayBroadcastQuiz: [
       { type: 'text', content: 'This is the wednesday broadcast quiz!' },
     ],
