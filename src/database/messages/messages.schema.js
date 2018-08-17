@@ -10,7 +10,6 @@ const Schema = mongoose.Schema
 * @category: reply, broadcast, content
 * */
 const messagesSchema = new Schema({
-    _id: { type: Schema.Types.String, required: [true, 'ID is required'], unique: true },
     name: { type: Schema.Types.String, default: 'unnamed' },
     message: { type: Schema.Types.String, required: false, default: '{ type: \'text\', content: \'Hello World!\' }' },
     type: { type: Schema.Types.String, required: false, default: 'text' },
