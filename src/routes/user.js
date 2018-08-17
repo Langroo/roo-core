@@ -572,6 +572,7 @@ router.get('/:senderId', async (request, response, next) => {
             language: 1,
             location: 1,
             payment: 1,
+            is_admin: 1,
             FirstSubscriptionDate: 1,
             subscription: 1,
             senderId: 1,
