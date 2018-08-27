@@ -121,7 +121,7 @@ module.exports.theWinnerIs = async () => {
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
     timeOfWinner = '18 17 * * 1'
   } else {
-    timeOfWinner = '25 17 * * 1'
+    timeOfWinner = '30 17 * * 1'
   }
   scheduler.scheduleJob(timeOfWinner, async () => {
     // -- Send the broadcast dialog with the messages of the Quiz
