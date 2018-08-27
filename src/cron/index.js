@@ -119,9 +119,9 @@ module.exports.oneTimeFix = async () => {
 module.exports.theWinnerIs = async () => {
   let timeOfWinner
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
-    timeOfWinner = '20 14 * * 5'
+    timeOfWinner = '5 00 * * 5'
   } else {
-    timeOfWinner = '30 14 * * 5'
+    timeOfWinner = '5 15 * * 5'
   }
   scheduler.scheduleJob(timeOfWinner, async () => {
     // -- Send the broadcast dialog with the messages of the Quiz
