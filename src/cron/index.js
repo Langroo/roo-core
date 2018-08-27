@@ -98,12 +98,12 @@ module.exports.SurveyToGoogleSheetsCron = () => {
 module.exports.newQuiz = async () => {
   let timeOfQuiz
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
-    timeOfQuiz = '40 13 * * 5'
+    timeOfQuiz = '40 15 * * 1'
   } else {
-    timeOfQuiz = '00 14 * * 5'
+    timeOfQuiz = '30 12 * * 1'
   }
   scheduler.scheduleJob(timeOfQuiz, async () => {
-    await broadcastSender.sendBroadcastMessage('fridayBroadcastQuiz', 'UNSUBSCRIBED')
+    await broadcastSender.sendBroadcastMessage('mondayBroadcastQuiz', 'UNSUBSCRIBED')
     broadcastQuizTools.setContextInBot(true)
       .catch(() => console.log('An error occurred setting the users awaiting_answer parameter to 1 for the quiz answer'))
   })
