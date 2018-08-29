@@ -57,8 +57,8 @@ module.exports.MainCronJob = async () => {
   // -- Google Sheets to Mongo cronjob
   scheduler.scheduleJob('Sheets-To-Mongo and CRM Profile Refresher Cronjob', profileFullUpdateCronTime, async () => {
     try {
-      console.info('----------- CRONJOB INFORMATION -----------')
-      console.info('Running (%s)\nAt :: [%s]', this.name, Date())
+      console.info('\n\n----------- CRONJOB INFORMATION -----------')
+      console.info('Running (Sheets-To-Mongo and CRM Profile Refresher Cronjob)\nAt :: [%s]', Date())
       SheetsToMongo.execute()
     } catch (reason) {
       console.error('ERROR AT CRONJOB :: ', reason)
@@ -73,7 +73,7 @@ module.exports.UpdateLastInteractionCron = () => {
     cronScheduleTime = '*/2 * * * *'
   }
   scheduler.scheduleJob(taskName, cronScheduleTime, async () => {
-    console.info('----------- CRONJOB INFORMATION -----------')
+    console.info('\n\n----------- CRONJOB INFORMATION -----------')
     console.info('Running (%s)\nAt :: [%s]', taskName, Date())
     // -- Call users interaction
     await UserActions.updateLastInteraction()
@@ -85,7 +85,7 @@ module.exports.SurveyToGoogleSheetsCron = () => {
   const taskName = 'Survey GoogleSheet Refresh'
   scheduler.scheduleJob(taskName, '0 4,13,23 * * *', async () => {
     try {
-      console.info('----------- CRONJOB INFORMATION -----------')
+      console.info('\n\n----------- CRONJOB INFORMATION -----------')
       console.info('Running (%s)\nAt :: [%s]', taskName, Date())
       // -- Update Survey
       await CRM.surveyUpdate()
@@ -121,7 +121,7 @@ module.exports.theWinnerIs = async () => {
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
     timeOfWinner = '18 17 * * 1'
   } else {
-    timeOfWinner = '25 17 * * 1'
+    timeOfWinner = '30 17 * * 1'
   }
   scheduler.scheduleJob(timeOfWinner, async () => {
     // -- Send the broadcast dialog with the messages of the Quiz

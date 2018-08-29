@@ -131,16 +131,16 @@ class StripePayment {
 
   // -- Related with subscriptions
   async createSubscription (customerID, plans = [], trial_period_days = 14, billing = 'charge_automatically') {
-    if (customerID === null || customerID === undefined) {
+    if (!customerID) {
       throw new Error('Customer ID is not defined')
     }
     if (plans.length === 0 || plans === null || plans === undefined) {
       throw new Error('Plans are not listed')
     }
-    if (trial_period_days === null || trial_period_days === undefined) {
+    if (!trial_period_days) {
       throw new Error('Trial period days is not defined')
     }
-    if (billing === null || billing === undefined) {
+    if (!billing) {
       billing = 'charge_automatically'
     }
 
@@ -164,7 +164,7 @@ class StripePayment {
   }
 
   async updateSubscription (suscriptionID, plans = [], trial_period_days = 14, billing = 'charge_automatically') {
-    if (suscriptionID === null || suscriptionID === undefined) {
+    if (!suscriptionID) {
       throw new Error('Subscription ID is not defined')
     }
     if (plans.length === 0 || plans === null || plans === undefined) {
