@@ -177,7 +177,7 @@ class PaymentController {
           throw new Error('{data.description} is not defined or is not properly set')
         }
         if (data.email === null || data.email === undefined || data.email.length <= 0) {
-          throw new Error('{data.email} is not defiend or is not valid')
+          throw new Error('{data.email} is not defined or is not valid')
         }
         if (data.planId === null || data.planId === undefined || data.planId.length <= 0) {
           throw new Error('{data.planId} is not defined or is not properly set')
@@ -197,7 +197,7 @@ class PaymentController {
           query: { conversationId: data.conversationId },
           findOne: true,
         })
-        if (subscription === null || subscription === undefined) {
+        if (!subscription) {
           // -- Get user and calculate free days left | Free days apply just for CONTENT_ONLY plans
           user = await UserManagement.retrieve({ query: { senderId: data.conversationId }, findOne: true })
           if (user === null || user === undefined) {
@@ -269,7 +269,7 @@ class PaymentController {
           })
 
           // -- return data
-          if (user != null || user != undefined) {
+          if (user) {
             return subscription._id
           }
           throw new Error('Unexpected error occurred')
@@ -294,7 +294,6 @@ class PaymentController {
         // -- Declare variables
         let subscription
         let user
-        let customer
 
         // -- Find Subscription
         subscription = await SubscriptionManagement.retrieve({ query: { conversationId }, findOne: true })
