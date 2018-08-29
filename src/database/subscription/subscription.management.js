@@ -3,7 +3,6 @@
  */
 const mongoose = require('mongoose')
 const Subscription = require('./subscription.model')
-const subscriptionCollection = mongoose.connection.collection('subscription')
 
 class SubscriptionManagement {
 
@@ -12,8 +11,8 @@ class SubscriptionManagement {
    */
   async create (subscriptionModel) {
     try {
-      const subscription = new Subscription(subscriptionModel);
-      await subscription.save();
+      const subscription = new Subscription(subscriptionModel)
+      await subscription.save()
       return subscription
     } catch (reason) {
       console.log('An error occurred while creating new subscription ', reason)
@@ -45,7 +44,7 @@ class SubscriptionManagement {
     }
   }
 
-  async findAndUpdate(query, set) {
+  async findAndUpdate (query, set) {
     try {
       return await Subscription.findOneAndUpdate(query, { $set: set }, { new: true })
     } catch (reason) {
@@ -56,7 +55,7 @@ class SubscriptionManagement {
   /**
    * Delete
    */
-  async delete(subscription_id) {
+  async delete (subscription_id) {
     try {
       return await Subscription.findOneAndRemove({ _id: subscription_id })
     } catch (reason) {

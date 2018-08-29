@@ -32,13 +32,10 @@ Promise.all([MongoDB, Redis])
   console.log(response[0] ? 'MongoDB status :OK:' : 'MongoDB status :FAILED:')
   console.log(response[1] ? 'Redis status :OK:' : 'Redis status :FAILED:')
   console.log('-------------------------------------------\n')
-
-  if (process.env.REFRESH_MODE === 'true' || process.env.REFRESH_MODE === '1') {
-    console.log('-------------- CREATING PAYMENT PLANS -----------------')
-    await PaymentController.createPlans()
-      .catch(e => console.error(e))
-    console.log('----------- PAYMENT PLANS CREATED SUCCESSFULLY ------------')
-  }
+  console.log('-------------- CREATING PAYMENT PLANS -----------------')
+  await PaymentController.createPlans()
+    .catch(e => console.error(e))
+  console.log('----------- PAYMENT PLANS CREATED SUCCESSFULLY ------------')
 
   // Configure and install the raven
   Raven.config('https://96d6795013a54f8f852719919378cc59@sentry.io/304046').install()
