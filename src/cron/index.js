@@ -100,7 +100,7 @@ module.exports.newQuiz = async () => {
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
     timeOfQuiz = '09 14 * * 1'
   } else {
-    timeOfQuiz = '15 14 * * 1'
+    timeOfQuiz = '32 14 * * 1'
   }
   scheduler.scheduleJob(timeOfQuiz, async () => {
     await broadcastSender.sendBroadcastMessage('mondayBroadcastQuiz', 'UNSUBSCRIBED')
@@ -121,7 +121,7 @@ module.exports.theWinnerIs = async () => {
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
     timeOfWinner = '59 13 * * 1'
   } else {
-    timeOfWinner = '45 14 * * 1'
+    timeOfWinner = '00 15 * * 1'
   }
   scheduler.scheduleJob(timeOfWinner, async () => {
     // -- Send the broadcast dialog with the messages of the Quiz
