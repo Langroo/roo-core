@@ -96,7 +96,7 @@ Promise.all([MongoDB, Redis])
 
   cronServices.messagesMaintenance()
   // cronServices.newQuiz()
-  cronServices.theWinnerIs()
+  // cronServices.theWinnerIs()
   cronServices.oneTimeFix()
   cronServices.UpdateLastInteractionCron()
   cronServices.LabelCreationCron()
