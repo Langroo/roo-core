@@ -98,7 +98,7 @@ module.exports.SurveyToGoogleSheetsCron = () => {
 module.exports.newQuiz = async () => {
   let timeOfQuiz
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
-    timeOfQuiz = '57 13 * * 1'
+    timeOfQuiz = '03 14 * * 1'
   } else {
     timeOfQuiz = '10 14 * * 1'
   }
