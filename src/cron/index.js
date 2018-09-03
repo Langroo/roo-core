@@ -98,7 +98,7 @@ module.exports.SurveyToGoogleSheetsCron = () => {
 module.exports.newQuiz = async () => {
   let timeOfQuiz
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
-    timeOfQuiz = '30 12 * * 1'
+    timeOfQuiz = '36 13 * * 1'
   } else {
     timeOfQuiz = '00 14 * * 1'
   }
@@ -119,9 +119,9 @@ module.exports.oneTimeFix = async () => {
 module.exports.theWinnerIs = async () => {
   let timeOfWinner
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
-    timeOfWinner = '18 17 * * 1'
+    timeOfWinner = '38 13 * * 1'
   } else {
-    timeOfWinner = '30 17 * * 1'
+    timeOfWinner = '30 14 * * 1'
   }
   scheduler.scheduleJob(timeOfWinner, async () => {
     // -- Send the broadcast dialog with the messages of the Quiz
