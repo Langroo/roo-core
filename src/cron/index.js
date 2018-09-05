@@ -98,9 +98,9 @@ module.exports.SurveyToGoogleSheetsCron = () => {
 module.exports.newQuiz = async () => {
   let timeOfQuiz
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
-    timeOfQuiz = '09 14 * * 1'
+    timeOfQuiz = '00 14 * * 3'
   } else {
-    timeOfQuiz = '35 14 * * 1'
+    timeOfQuiz = '53 13 * * 3'
   }
   scheduler.scheduleJob(timeOfQuiz, async () => {
     await broadcastSender.sendBroadcastMessage('mondayBroadcastQuiz', 'UNSUBSCRIBED')
@@ -109,23 +109,24 @@ module.exports.newQuiz = async () => {
   })
 }
 
-module.exports.oneTimeFix = async () => {
-  scheduler.scheduleJob('30 9 17 8 *', async () => {
+module.exports.theWinnerIs = async () => {
+  let timeOfWinner
+  if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
+    timeOfWinner = '55 13 * * 3'
+  } else {
+    timeOfWinner = '30 14 * * 3'
+  }
+  scheduler.scheduleJob(timeOfWinner, async () => {
+    // -- Send the broadcast dialog with the messages of the Quiz
+    await broadcastSender.sendBroadcastMessage('theWinnerIs', 'UNSUBSCRIBED')
     broadcastQuizTools.setContextInBot(false)
       .catch(() => console.log('An error occurred setting the users awaiting_answer parameter to 1 for the quiz answer'))
   })
 }
 
-module.exports.theWinnerIs = async () => {
-  let timeOfWinner
-  if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
-    timeOfWinner = '59 13 * * 1'
-  } else {
-    timeOfWinner = '00 15 * * 1'
-  }
-  scheduler.scheduleJob(timeOfWinner, async () => {
-    // -- Send the broadcast dialog with the messages of the Quiz
-    await broadcastSender.sendBroadcastMessage('theWinnerIs', 'UNSUBSCRIBED')
+// Restore users to previous context
+module.exports.oneTimeFix = async () => {
+  scheduler.scheduleJob('35 14 * * 3', async () => {
     broadcastQuizTools.setContextInBot(false)
       .catch(() => console.log('An error occurred setting the users awaiting_answer parameter to 1 for the quiz answer'))
   })
