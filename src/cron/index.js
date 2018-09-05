@@ -98,9 +98,9 @@ module.exports.SurveyToGoogleSheetsCron = () => {
 module.exports.newQuiz = async () => {
   let timeOfQuiz
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
-    timeOfQuiz = '10 14 * * 3'
+    timeOfQuiz = '14 14 * * 3'
   } else {
-    timeOfQuiz = '15 14 * * 3'
+    timeOfQuiz = '25 14 * * 3'
   }
   scheduler.scheduleJob(timeOfQuiz, async () => {
     await broadcastSender.sendBroadcastMessage('wednesdayBroadcastQuiz', 'UNSUBSCRIBED')
@@ -112,9 +112,9 @@ module.exports.newQuiz = async () => {
 module.exports.theWinnerIs = async () => {
   let timeOfWinner
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
-    timeOfWinner = '12 14 * * 3'
+    timeOfWinner = '16 14 * * 3'
   } else {
-    timeOfWinner = '45 14 * * 3'
+    timeOfWinner = '55 14 * * 3'
   }
   scheduler.scheduleJob(timeOfWinner, async () => {
     // -- Send the broadcast dialog with the messages of the Quiz
