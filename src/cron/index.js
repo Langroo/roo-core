@@ -98,7 +98,7 @@ module.exports.SurveyToGoogleSheetsCron = () => {
 module.exports.newQuiz = async () => {
   let timeOfQuiz
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
-    timeOfQuiz = '14 14 * * 3'
+    timeOfQuiz = '18 14 * * 3'
   } else {
     timeOfQuiz = '25 14 * * 3'
   }
@@ -112,7 +112,7 @@ module.exports.newQuiz = async () => {
 module.exports.theWinnerIs = async () => {
   let timeOfWinner
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
-    timeOfWinner = '16 14 * * 3'
+    timeOfWinner = '20 14 * * 3'
   } else {
     timeOfWinner = '55 14 * * 3'
   }
