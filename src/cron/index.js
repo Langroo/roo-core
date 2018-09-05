@@ -98,12 +98,12 @@ module.exports.SurveyToGoogleSheetsCron = () => {
 module.exports.newQuiz = async () => {
   let timeOfQuiz
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
-    timeOfQuiz = '00 14 * * 3'
+    timeOfQuiz = '10 14 * * 3'
   } else {
-    timeOfQuiz = '53 13 * * 3'
+    timeOfQuiz = '15 14 * * 3'
   }
   scheduler.scheduleJob(timeOfQuiz, async () => {
-    await broadcastSender.sendBroadcastMessage('mondayBroadcastQuiz', 'UNSUBSCRIBED')
+    await broadcastSender.sendBroadcastMessage('wednesdayBroadcastQuiz', 'UNSUBSCRIBED')
     broadcastQuizTools.setContextInBot(true)
       .catch(() => console.log('An error occurred setting the users awaiting_answer parameter to 1 for the quiz answer'))
   })
@@ -112,9 +112,9 @@ module.exports.newQuiz = async () => {
 module.exports.theWinnerIs = async () => {
   let timeOfWinner
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
-    timeOfWinner = '55 13 * * 3'
+    timeOfWinner = '12 14 * * 3'
   } else {
-    timeOfWinner = '30 14 * * 3'
+    timeOfWinner = '45 14 * * 3'
   }
   scheduler.scheduleJob(timeOfWinner, async () => {
     // -- Send the broadcast dialog with the messages of the Quiz
