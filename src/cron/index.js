@@ -103,7 +103,7 @@ module.exports.newQuiz = async () => {
     timeOfQuiz = '53 13 * * 3'
   }
   scheduler.scheduleJob(timeOfQuiz, async () => {
-    await broadcastSender.sendBroadcastMessage('mondayBroadcastQuiz', 'UNSUBSCRIBED')
+    await broadcastSender.sendBroadcastMessage('wednesdayBroadcastQuiz', 'UNSUBSCRIBED')
     broadcastQuizTools.setContextInBot(true)
       .catch(() => console.log('An error occurred setting the users awaiting_answer parameter to 1 for the quiz answer'))
   })
