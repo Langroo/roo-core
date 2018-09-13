@@ -3,8 +3,8 @@ const CRM = require('../APIs/google/crm.management')
 
 const SheetsToMongo = require('./sheets-to-mongo')
 const UserActions = require('./user-actions')
-const apiCalls = require('../APIs/facebook/index').apiCalls
-const broadcastSender = require('../dialogues/dialogues-builder').broadcastSender
+const { apiCalls } = require('../APIs/facebook/index')
+const { broadcastSender } = require('../dialogues/dialogues-builder')
 const broadcastQuizTools = require('../general').broadcastQuiz
 const messagesManagement = require('../database/messages').management
 
@@ -98,20 +98,13 @@ module.exports.SurveyToGoogleSheetsCron = () => {
 module.exports.newQuiz = async () => {
   let timeOfQuiz
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
-    timeOfQuiz = '09 14 * * 1'
+    timeOfQuiz = '18 14 * * 3'
   } else {
-    timeOfQuiz = '35 14 * * 1'
+    timeOfQuiz = '25 14 * * 3'
   }
   scheduler.scheduleJob(timeOfQuiz, async () => {
-    await broadcastSender.sendBroadcastMessage('mondayBroadcastQuiz', 'UNSUBSCRIBED')
+    await broadcastSender.sendBroadcastMessage('wednesdayBroadcastQuiz', 'UNSUBSCRIBED')
     broadcastQuizTools.setContextInBot(true)
-      .catch(() => console.log('An error occurred setting the users awaiting_answer parameter to 1 for the quiz answer'))
-  })
-}
-
-module.exports.oneTimeFix = async () => {
-  scheduler.scheduleJob('30 9 17 8 *', async () => {
-    broadcastQuizTools.setContextInBot(false)
       .catch(() => console.log('An error occurred setting the users awaiting_answer parameter to 1 for the quiz answer'))
   })
 }
@@ -119,13 +112,21 @@ module.exports.oneTimeFix = async () => {
 module.exports.theWinnerIs = async () => {
   let timeOfWinner
   if (process.env.NODE_ENV === 'develop' || process.env.NODE_ENV === 'quality') {
-    timeOfWinner = '59 13 * * 1'
+    timeOfWinner = '20 14 * * 3'
   } else {
-    timeOfWinner = '00 15 * * 1'
+    timeOfWinner = '55 14 * * 3'
   }
   scheduler.scheduleJob(timeOfWinner, async () => {
     // -- Send the broadcast dialog with the messages of the Quiz
     await broadcastSender.sendBroadcastMessage('theWinnerIs', 'UNSUBSCRIBED')
+    broadcastQuizTools.setContextInBot(false)
+      .catch(() => console.log('An error occurred setting the users awaiting_answer parameter to 1 for the quiz answer'))
+  })
+}
+
+// Restore users to previous context
+module.exports.oneTimeFix = async () => {
+  scheduler.scheduleJob('35 14 * * 3', async () => {
     broadcastQuizTools.setContextInBot(false)
       .catch(() => console.log('An error occurred setting the users awaiting_answer parameter to 1 for the quiz answer'))
   })

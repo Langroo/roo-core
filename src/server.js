@@ -32,10 +32,12 @@ Promise.all([MongoDB, Redis])
   console.log(response[0] ? 'MongoDB status :OK:' : 'MongoDB status :FAILED:')
   console.log(response[1] ? 'Redis status :OK:' : 'Redis status :FAILED:')
   console.log('-------------------------------------------\n')
-  console.log('-------------- CREATING PAYMENT PLANS -----------------')
-  await PaymentController.createPlans()
-    .catch(e => console.error(e))
-  console.log('----------- PAYMENT PLANS CREATED SUCCESSFULLY ------------')
+  if (process.env.REFRESH_MODE === '1' || process.env.REFRESH_MODE === 'true') {
+    console.log('-------------- CREATING PAYMENT PLANS -----------------')
+    await PaymentController.createPlans()
+      .catch(e => console.error(e))
+    console.log('----------- PAYMENT PLANS CREATED SUCCESSFULLY ------------')
+  }
 
   // Configure and install the raven
   Raven.config('https://96d6795013a54f8f852719919378cc59@sentry.io/304046').install()
@@ -95,9 +97,6 @@ Promise.all([MongoDB, Redis])
   })
 
   cronServices.messagesMaintenance()
-  cronServices.newQuiz()
-  cronServices.theWinnerIs()
-  cronServices.oneTimeFix()
   cronServices.UpdateLastInteractionCron()
   cronServices.LabelCreationCron()
   await cronServices.MainCronJob()
