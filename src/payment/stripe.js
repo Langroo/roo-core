@@ -134,7 +134,7 @@ class StripePayment {
     if (plans.length === 0 || plans === null || plans === undefined) {
       throw new Error('Plans are not listed')
     }
-    if (!trial_period_days) {
+    if (!trial_period_days && trial_period_days !== 0) {
       throw new Error('Trial period days is not defined')
     }
     if (!billing) {
