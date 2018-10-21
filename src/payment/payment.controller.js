@@ -104,7 +104,6 @@ class PaymentController {
      */
   static async dropAllCustomers () {
     try {
-        // -- Declare variables
       let customers
 
         // -- Retrieve and delete
@@ -157,7 +156,7 @@ class PaymentController {
       }) {
     try {
         // -- Check variables integrity
-      if (data === null || data === undefined || data === {}) {
+      if (!data) {
         throw new Error('{data} is not defined')
       }
       if (data.amount === null || data.amount === undefined || data.amount <= 0.0) {
@@ -198,10 +197,6 @@ class PaymentController {
         user = await UserManagement.retrieve({ query: { senderId: data.conversationId }, findOne: true })
         if (!user) {
           throw new Error('Error retrieving the user\'s data from the database')
-        }
-        if ((data.planId === 'basic-plan-usd' || data.planId === 'basic-plan-eur') && user.content.current.week <= 2) {
-          trial_period_left = (user.content.current.week * 7) - (7 - user.content.current.day)
-          trial_period_left = 14 - trial_period_left
         }
 
         // -- Create Customer if it not exist otherwise retrieve it
