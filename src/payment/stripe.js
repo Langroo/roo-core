@@ -1,4 +1,3 @@
-
 class StripePayment {
   constructor () {
     this.stripeAPI = require('stripe')(process.env.STRIPE_SECRET_KEY)
@@ -10,9 +9,7 @@ class StripePayment {
   }
 
   async retrieveCustomer (customerId) {
-    if (customerId === null || customerId === undefined) {
-      throw new Error('Customer ID is not defined')
-    }
+    if (!customerId) { throw new Error('Customer ID is not defined') }
     try {
       return await this.stripeAPI.customers.retrieve(customerId)
     } catch (reason) {
@@ -29,7 +26,7 @@ class StripePayment {
   }
 
   async deleteCustomer (customerId) {
-    if (customerId === null || customerId === undefined) {
+    if (!customerId) {
       throw new Error('Customer ID is not defined')
     }
     try {
@@ -99,7 +96,7 @@ class StripePayment {
   }
 
   async deletePlan (id) {
-    if (id === null || id === undefined) {
+    if (!id) {
       throw new Error('Plan ID is not defined')
     }
     try {

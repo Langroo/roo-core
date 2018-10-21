@@ -197,7 +197,7 @@ router.post('/charge', async (request, response) => {
     return response.redirect('/payment/success')
 
   } catch (error) {
-    console.log('There was a payment error :: ', error)
+    console.log('There was a payment problem :: ', error)
 
     // -- Call wekhook event
     await RooWebhook.paymentSubscriptionFinished(data.conversationId, PlanEnum[data.planId], 'error')
