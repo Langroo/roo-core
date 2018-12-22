@@ -100,14 +100,5 @@
       ]
     ],
     "ignore": "src/public/**/*.*"
-  },
-  "eslintConfig": {
-    "extends": "zavatta",
-    "rules": {
-      "no-console": 0,
-      "callback-return": 0,
-      "camelcase": 0,
-      "require-await": 0
-    }
   }
 }
