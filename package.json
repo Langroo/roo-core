@@ -1,7 +1,7 @@
 {
-  "name": "langroo-api",
-  "version": "1.0.0",
-  "description": "Langroo API",
+  "name": "roo-core",
+  "version": "1.0.1",
+  "description": "Roo Core Manager",
   "main": "server.js",
   "scripts": {
     "start": "nodemon --watch src -e * --exec babel-node -- src/server.js --copy-files",
@@ -17,7 +17,8 @@
   "keywords": [
     "API",
     "Langroo",
-    "Heroku"
+    "Heroku",
+    "Core"
   ],
   "author": "Moisés Berenguer",
   "license": "ISC",
@@ -50,8 +51,6 @@
     "cron-parser": "^2.4.3",
     "dotenv": "^4.0.0",
     "eachasync": "^1.0.3",
-    "eslint-config-zavatta": "^4.2.0",
-    "eslint-plugin-import": "^1.6.1",
     "express": "^4.14.0",
     "express-handlebars": "^3.0.0",
     "follow-redirects": "^1.2.5",
@@ -62,7 +61,7 @@
     "mongoose": "^4.12.2",
     "mongoose-integer": "^0.1.1",
     "mongoose-type-email": "^1.0.5",
-    "morgan": "^1.9.0",
+    "morgan": "^1.9.1",
     "node-schedule": "^1.2.5",
     "node-schedule-tz": "^1.2.1-4",
     "passport": "^0.4.0",
@@ -81,9 +80,10 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "eslint": "^3.19.0",
-    "eslint-config-google": "^0.9.1",
-    "nodemon": "^1.17.5"
+    "nodemon": "^1.17.5",
+    "eslint": "^5.10.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^1.6.1"
   },
   "babel": {
     "presets": [
