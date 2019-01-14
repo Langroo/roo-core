@@ -1,9 +1,9 @@
 /**
  * Global dependencies
  */
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-require('mongoose-type-email')
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+require('mongoose-type-email');
 
 /**
  * User Metadata Schema
@@ -155,6 +155,6 @@ const UserMetadataSchema = new Schema({
       },
     },
   },
-}, { collection: 'user-metadata' })
+}, { collection: 'user-metadata' });
 
-module.exports = UserMetadataSchema
+module.exports = UserMetadataSchema;

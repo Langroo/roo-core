@@ -1,47 +1,46 @@
 /**
  * Dependencies
  */
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 // -- Local dependencies
-const TutorRequest = require('./tutor-request.model')
-const tutorCollection = mongoose.connection.collection('tutor_request')
+const TutorRequest = require('./tutor-request.model');
+const tutorCollection = mongoose.connection.collection('tutor_request');
 
 class TutorRequestManagement {
-
   /**
    * Create
    */
-  async create (tutorRequestModel) {
+  async create(tutorRequestModel) {
     return new Promise((resolve, reject) => {
       // -- Create new TutorRequest
-      const tutorRequest = new TutorRequest(tutorRequestModel)
+      const tutorRequest = new TutorRequest(tutorRequestModel);
 
       // -- Save Schedule
       tutorRequest.save((error) => {
-        if (error) { reject(error) } else { resolve(tutorRequest) }
-      })
-    })
+        if (error) { reject(error); } else { resolve(tutorRequest); }
+      });
+    });
   }
 
   /**
    * Retrieve
    */
-  async retrieve (options = {
+  async retrieve(options = {
     query: {},
     findOne: false,
   }) {
     try {
-      if (!options.findOne) { return await TutorRequest.find(options.query) } else if (options.findOne) { return await TutorRequest.findOne(options.query) }
+      if (!options.findOne) { return await TutorRequest.find(options.query); } if (options.findOne) { return await TutorRequest.findOne(options.query); }
     } catch (reason) {
-      console.log('An error occurred while retrieving a tutor request ', reason)
+      console.log('An error occurred while retrieving a tutor request ', reason);
     }
   }
 
   /**
    * Retrieve & JOIN With USER
    */
-  async retrieveWithUsers () {
+  async retrieveWithUsers() {
     try {
       return (await tutorCollection.aggregate([
         {
@@ -55,33 +54,33 @@ class TutorRequestManagement {
         {
           $unwind: '$user',
         },
-      ]).toArray())
+      ]).toArray());
     } catch (reason) {
-      console.log('An error occurred while retrieving a tutor request ', reason)
+      console.log('An error occurred while retrieving a tutor request ', reason);
     }
   }
 
   /**
    * Update
    */
-  async update (_id, set) {
+  async update(_id, set) {
     try {
-      return await TutorRequest.findOneAndUpdate({ _id }, { $set: set }, { new: true })
+      return await TutorRequest.findOneAndUpdate({ _id }, { $set: set }, { new: true });
     } catch (reason) {
-      console.log('An error occurred while deleting a tutor request ', reason)
+      console.log('An error occurred while deleting a tutor request ', reason);
     }
   }
 
   /**
    * Delete
    */
-  async delete (senderId) {
+  async delete(senderId) {
     try {
-      return await TutorRequest.findOneAndRemove({ senderId })
+      return await TutorRequest.findOneAndRemove({ senderId });
     } catch (reason) {
-      console.log('An error occurred while deleting a tutor request ', reason)
+      console.log('An error occurred while deleting a tutor request ', reason);
     }
   }
 }
 
-module.exports = new TutorRequestManagement()
+module.exports = new TutorRequestManagement();

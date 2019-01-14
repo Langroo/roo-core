@@ -1,0 +1,24 @@
+{
+    "extends": "airbnb-base",
+    "plugins": [ "import" ],
+    "rules": {
+      "no-underscore-dangle": "off",
+      "no-throw-literal":"off",
+      "prefer-promise-reject-errors": "off",
+      "no-param-reassign": "off",
+      "object-curly-newline": "warn",
+      "max-len": "off",
+      "consistent-return": "off",
+      "no-loop-func": "off",
+      "no-await-in-loop": "off",
+      "max-lines": "off",
+      "no-console": "off",
+      "import/newline-after-import": "off",
+      "no-unused-vars": "warn",
+      "camelcase": "off",
+      "arrow-body-style": "warn",
+      "no-return-await": "off",
+      "array-callback-return": "off",
+      "no-restricted-syntax": "off"
+    }
+}

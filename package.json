@@ -50,8 +50,6 @@
     "cron-parser": "^2.7.3",
     "dotenv": "^4.0.0",
     "eachasync": "^1.0.3",
-    "eslint-config-zavatta": "^4.2.0",
-    "eslint-plugin-import": "^1.6.1",
     "express": "^4.16.4",
     "express-handlebars": "^3.0.0",
     "follow-redirects": "^1.6.1",
@@ -80,8 +78,9 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "eslint": "^3.19.0",
-    "eslint-config-google": "^0.9.1",
+    "eslint": "^5.12.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
     "nodemon": "^1.18.9"
   },
   "babel": {
@@ -99,14 +98,5 @@
       ]
     ],
     "ignore": "src/public/**/*.*"
-  },
-  "eslintConfig": {
-    "extends": "zavatta",
-    "rules": {
-      "no-console": 0,
-      "callback-return": 0,
-      "camelcase": 0,
-      "require-await": 0
-    }
   }
 }

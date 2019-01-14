@@ -5,4 +5,4 @@ module.exports = {
   CASUAL_TUTOR: 'Casual Tutor',
   STANDARD_TUTOR: 'Standard Tutor',
   ELITE_TUTOR: 'Elite Tutor',
-}
+};

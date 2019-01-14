@@ -1,16 +1,16 @@
 /**
  * Global dependencies
  */
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 /**
  * Local dependencies
  */
-const SubscriptionSchema = require('./subscription.schema')
+const SubscriptionSchema = require('./subscription.schema');
 
 /**
  * Declare model
  */
-const SubscriptionModel = mongoose.model('SubscriptionModel', SubscriptionSchema)
+const SubscriptionModel = mongoose.model('SubscriptionModel', SubscriptionSchema);
 
-module.exports = SubscriptionModel
+module.exports = SubscriptionModel;
