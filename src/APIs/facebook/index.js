@@ -4,4 +4,4 @@ module.exports = {
   users: require('./users'),
   pages: require('./pages'),
   apiCalls: require('./apiCalls'),
-}
+};

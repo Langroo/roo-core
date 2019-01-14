@@ -63,7 +63,7 @@ const statusCodes = {
   },
 };
 
-module.exports = function(code, data) {
+module.exports = function (code, data) {
   return {
     status: statusCodes[code] || statusCodes[500],
     data,

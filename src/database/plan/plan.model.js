@@ -1,16 +1,16 @@
 /**
  * Global dependencies
  */
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 /**
  * Local dependencies
  */
-const PlanSchema = require('./plan.schema')
+const PlanSchema = require('./plan.schema');
 
 /**
  * Declare model
  */
-const PlanModel = mongoose.model('PlanModel', PlanSchema)
+const PlanModel = mongoose.model('PlanModel', PlanSchema);
 
-module.exports = PlanModel
+module.exports = PlanModel;

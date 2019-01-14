@@ -3,33 +3,31 @@
  * Manage schema, complete CRUD
  * ==================================================================
  */
-const mongoose = require('mongoose')
-const googlesheet = require('./sheet')
-const maps = require('../../general/index').maps
+const mongoose = require('mongoose');
+const googlesheet = require('./sheet');
+const maps = require('../../general/index').maps;
 
 /** *
  * Auxiliary functions
  */
-const setTimeout = require('timers').setTimeout
-const bufferSize = 1
-const timeBetweenRequests = 4000
-const messageTimer = ms => { return new Promise(resolve => setTimeout(resolve, ms)) }
+const setTimeout = require('timers').setTimeout;
+const bufferSize = 1;
+const timeBetweenRequests = 4000;
+const messageTimer = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 /**
  * DB Instances | Collections
  */
-const userCollection = mongoose.connection.collection('user')
-const tutorRequestCollection = mongoose.connection.collection('tutor_request')
-const analyticsCollection = mongoose.connection.collection('analytics')
+const userCollection = mongoose.connection.collection('user');
+const tutorRequestCollection = mongoose.connection.collection('tutor_request');
+const analyticsCollection = mongoose.connection.collection('analytics');
 
 class CRM {
-
-  async addNewProfileRecord (senderId) {
+  async addNewProfileRecord(senderId) {
     try {
-
       // -- Retrieve Sheets
-      const mainProfileSheet = new googlesheet('profile-main')
-      const detailedProfileSheet = new googlesheet('profile-detailed')
+      const mainProfileSheet = new googlesheet('profile-main');
+      const detailedProfileSheet = new googlesheet('profile-detailed');
 
       // -- Retrieve data
       const usersCursor = userCollection.aggregate([
@@ -70,10 +68,10 @@ class CRM {
             tutor_request: { $arrayElemAt: ['$tutor-request', 0] },
           },
         },
-      ])
-      const buffer = 0
-      const user = await usersCursor.next()
-      if (!user) { throw new Error(`No user found with senderId [${senderId}]`) }
+      ]);
+      const buffer = 0;
+      const user = await usersCursor.next();
+      if (!user) { throw new Error(`No user found with senderId [${senderId}]`); }
       // -- Add row in main profile sheet
       await mainProfileSheet.create({
         name: user.name.full_name,
@@ -89,7 +87,7 @@ class CRM {
         nps: user.metadata ? user.metadata.rating_value : 'Not completed',
         date_message_us: user.subscription_date,
         tutor_requested: user.tutor_request ? 'Yes' : 'No',
-      })
+      });
       // -- Add row in detailed profile sheet
       await detailedProfileSheet.create({
         name: user.name.full_name,
@@ -114,20 +112,19 @@ class CRM {
         status: user.subscription.status,
         nps: user.metadata ? user.metadata.rating_value : 'Not completed',
         tutor_requested: user.tutor_request ? 'Yes' : 'No',
-      })
+      });
 
       if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-        console.info('New profile data stored in GoogleSheets for user :: [%s]', user.name.full_name)
+        console.info('New profile data stored in GoogleSheets for user :: [%s]', user.name.full_name);
       }
-
     } catch (error) {
       if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-        console.error('Error saving the new user data on GoogleSheets CRM [Profile]')
+        console.error('Error saving the new user data on GoogleSheets CRM [Profile]');
       }
       if (error) {
-        console.error('Reason [%s]', error.message)
+        console.error('Reason [%s]', error.message);
       } else {
-        console.error('Reason [%s]', error)
+        console.error('Reason [%s]', error);
       }
     }
   }
@@ -139,18 +136,18 @@ class CRM {
    *  clear on all sheets involved and recreates the data
    * =====================================================
    */
-  async profileFullUpdate () {
-    let successfullySaved = 0
+  async profileFullUpdate() {
+    let successfullySaved = 0;
     try {
-            // -- Retrieve Sheets
-      const mainProfileSheet = new googlesheet('profile-main')
-      const detailedProfileSheet = new googlesheet('profile-detailed')
+      // -- Retrieve Sheets
+      const mainProfileSheet = new googlesheet('profile-main');
+      const detailedProfileSheet = new googlesheet('profile-detailed');
 
-            // -- Delete from profile
-      await mainProfileSheet.delete()
-      await detailedProfileSheet.delete()
+      // -- Delete from profile
+      await mainProfileSheet.delete();
+      await detailedProfileSheet.delete();
 
-            // -- Retrieve data
+      // -- Retrieve data
       const usersCursor = userCollection.aggregate([
         {
           $lookup: {
@@ -184,8 +181,8 @@ class CRM {
             tutor_request: { $arrayElemAt: ['$tutor-request', 0] },
           },
         },
-      ])
-      let user
+      ]);
+      let user;
 
       // -- Prepare schemas
       /**
@@ -235,11 +232,11 @@ class CRM {
        * =====================================================
        */
 
-      let buffer = 0
+      let buffer = 0;
       while ((user = await usersCursor.next())) {
         if (buffer === bufferSize) {
-          await messageTimer(timeBetweenRequests)
-          buffer = 0
+          await messageTimer(timeBetweenRequests);
+          buffer = 0;
         }
         await mainProfileSheet.create({
           name: user.name.full_name,
@@ -255,7 +252,7 @@ class CRM {
           nps: user.metadata ? user.metadata.rating_value : 'Not completed',
           date_message_us: user.subscription_date,
           tutor_requested: user.tutor_request ? 'Yes' : 'No',
-        })
+        });
 
         await detailedProfileSheet.create({
           name: user.name.full_name,
@@ -280,44 +277,43 @@ class CRM {
           status: user.subscription.status,
           nps: user.metadata ? user.metadata.rating_value : 'Not completed',
           tutor_requested: user.tutor_request ? 'Yes' : 'No',
-        })
-        buffer++
-        successfullySaved++
+        });
+        buffer++;
+        successfullySaved++;
       }
-      console.info('Profiles successfully downloaded to GoogleSheets :: [%s]', successfullySaved)
-
+      console.info('Profiles successfully downloaded to GoogleSheets :: [%s]', successfullySaved);
     } catch (error) {
-      console.error('An error occurred while saving USERS data on GoogleSheets CRM [Profile]')
-      console.info('Profiles successfully downloaded to GoogleSheets before the error :: [%s]', successfullySaved)
+      console.error('An error occurred while saving USERS data on GoogleSheets CRM [Profile]');
+      console.info('Profiles successfully downloaded to GoogleSheets before the error :: [%s]', successfullySaved);
       if (error) {
-        console.error('Reason [%s]', error.message)
+        console.error('Reason [%s]', error.message);
       } else {
-        console.error('Reason [%s]', error)
+        console.error('Reason [%s]', error);
       }
     }
   }
 
-    /**
+  /**
      * ========================================================
      * surveyUpdate
      * Description: drop and update survey sheet on CRM
      * ========================================================
      */
-  async surveyUpdate () {
-    let successfullySaved = 0
+  async surveyUpdate() {
+    let successfullySaved = 0;
     try {
-            // -- Retrieve Sheets
-      const surveySheet = new googlesheet('survey')
+      // -- Retrieve Sheets
+      const surveySheet = new googlesheet('survey');
 
-            // -- Delete from profile
-      await surveySheet.delete()
+      // -- Delete from profile
+      await surveySheet.delete();
 
-            // -- Retrieve data
-      const usersCursor = userCollection.find()
-      let user
-      let surveyCursor
-      let surveyWrapper = {}
-      let survey
+      // -- Retrieve data
+      const usersCursor = userCollection.find();
+      let user;
+      let surveyCursor;
+      let surveyWrapper = {};
+      let survey;
 
       // -- Prepare schema
       /**
@@ -339,17 +335,16 @@ class CRM {
        * ====================================================
        */
 
-      let buffer = 0
+      let buffer = 0;
 
       while ((user = await usersCursor.next())) {
-
-        surveyWrapper = {}
-        survey = null
-        surveyCursor = null
+        surveyWrapper = {};
+        survey = null;
+        surveyCursor = null;
 
         if (buffer === bufferSize) {
-          await messageTimer(timeBetweenRequests)
-          buffer = 0
+          await messageTimer(timeBetweenRequests);
+          buffer = 0;
         }
         surveyCursor = analyticsCollection.aggregate([
           {
@@ -361,16 +356,16 @@ class CRM {
           {
             $sort: { createdAt: 1 },
           },
-        ])
+        ]);
 
-        if (!surveyCursor) { continue }
+        if (!surveyCursor) { continue; }
 
         while ((survey = await surveyCursor.next())) {
-          surveyWrapper[survey.key] = survey.value
+          surveyWrapper[survey.key] = survey.value;
         }
 
-        if (!surveyWrapper) { continue }
-        if (Object.keys(surveyWrapper).length === 0) { continue }
+        if (!surveyWrapper) { continue; }
+        if (Object.keys(surveyWrapper).length === 0) { continue; }
 
         await surveySheet.create({
           user_name: user.name.full_name,
@@ -385,39 +380,38 @@ class CRM {
           friend_idea: surveyWrapper.friend_idea || surveyWrapper.surveyQuestion8 || 'Not provided yet',
           correction_idea: surveyWrapper.correction_idea || surveyWrapper.surveyQuestion9 || 'Not provided yet',
           join_community: surveyWrapper.join_community || surveyWrapper.surveyQuestion10 || 'Not provided yet',
-        })
-        buffer++
-        successfullySaved++
+        });
+        buffer++;
+        successfullySaved++;
       }
-      console.info('Number of surveys successfully downloaded to GoogleSheets :: [%s]', successfullySaved)
-
+      console.info('Number of surveys successfully downloaded to GoogleSheets :: [%s]', successfullySaved);
     } catch (error) {
-      console.error('An error occurred while saving SURVEY data on GoogleSheets CRM [Profile]')
-      console.info('Number of surveys successfully downloaded to GoogleSheets before the error :: [%s]', successfullySaved)
+      console.error('An error occurred while saving SURVEY data on GoogleSheets CRM [Profile]');
+      console.info('Number of surveys successfully downloaded to GoogleSheets before the error :: [%s]', successfullySaved);
       if (error) {
-        console.error('Reason [%s]', error.message)
+        console.error('Reason [%s]', error.message);
       } else {
-        console.error('Reason [%s]', error)
+        console.error('Reason [%s]', error);
       }
     }
   }
 
-    /**
+  /**
      * ============================================================
      * tutorRequestUpdate
      * Description: Drop and update tutor request sheet on crm
      * ============================================================
      */
-  async tutorRequestUpdate () {
-    let successfullySaved = 0
+  async tutorRequestUpdate() {
+    let successfullySaved = 0;
     try {
       // -- Update google sheets
-      const tutorRequestsSheet = new googlesheet('tutor-requests')
+      const tutorRequestsSheet = new googlesheet('tutor-requests');
 
       // -- Delete from profile
-      await tutorRequestsSheet.delete()
+      await tutorRequestsSheet.delete();
 
-            // -- Retrieve data
+      // -- Retrieve data
       const tutorRequestsCursor = tutorRequestCollection.aggregate([
         {
           $lookup: {
@@ -430,18 +424,18 @@ class CRM {
         {
           $unwind: '$user',
         },
-      ])
-      let tutorRequest = await tutorRequestsCursor.next()
+      ]);
+      let tutorRequest = await tutorRequestsCursor.next();
 
       if (!tutorRequest) {
-        throw new Error({ message: 'No tutor requests to store found' })
+        throw new Error({ message: 'No tutor requests to store found' });
       }
 
-      let buffer = 0
+      let buffer = 0;
       do {
         if (buffer === bufferSize) {
-          await messageTimer(timeBetweenRequests)
-          buffer = 0
+          await messageTimer(timeBetweenRequests);
+          buffer = 0;
         }
         await tutorRequestsSheet.create({
           user_name: tutorRequest.user.name.full_name,
@@ -457,22 +451,21 @@ class CRM {
           internet_speed_description: maps.InternetSpeedDescription[tutorRequest.internet_speed_description] || 'Data unavailable for old users',
           request_date: tutorRequest.date,
           other_information: tutorRequest.other_information || 'Data unavailable for old users',
-        })
-        buffer++
-        successfullySaved++
-        tutorRequest = await tutorRequestsCursor.next()
-      } while (tutorRequest)
-      console.info('Number of tutor requests successfully downloaded to GoogleSheets :: [%s]', successfullySaved)
-
+        });
+        buffer++;
+        successfullySaved++;
+        tutorRequest = await tutorRequestsCursor.next();
+      } while (tutorRequest);
+      console.info('Number of tutor requests successfully downloaded to GoogleSheets :: [%s]', successfullySaved);
     } catch (error) {
-      console.info('Number of tutor requests successfully downloaded to GoogleSheets before the error :: [%s]', successfullySaved)
+      console.info('Number of tutor requests successfully downloaded to GoogleSheets before the error :: [%s]', successfullySaved);
       if (error.message) {
-        console.error('Events during tutor saving: [%s]', error.message)
+        console.error('Events during tutor saving: [%s]', error.message);
       } else {
-        console.error('Events during tutor saving: [%s]', error)
+        console.error('Events during tutor saving: [%s]', error);
       }
     }
   }
 }
 
-module.exports = new CRM()
+module.exports = new CRM();

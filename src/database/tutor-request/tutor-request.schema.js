@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const TutorRequestSchema = new Schema({
   user_id: {
@@ -46,6 +46,6 @@ const TutorRequestSchema = new Schema({
     type: Schema.Types.Boolean,
     required: true,
   },
-}, { collection: 'tutor-request' })
+}, { collection: 'tutor-request' });
 
-module.exports = TutorRequestSchema
+module.exports = TutorRequestSchema;

@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-const IntegerValidator = require('mongoose-integer')
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const IntegerValidator = require('mongoose-integer');
 
 /**
  * Analytics Schema
@@ -34,8 +34,8 @@ const AnalyticsSchema = new Schema({
     required: [true, 'Analytics createdAt is required'],
     default: Date.now(),
   },
-}, { collection: 'analytics' })
+}, { collection: 'analytics' });
 
-AnalyticsSchema.plugin(IntegerValidator)
+AnalyticsSchema.plugin(IntegerValidator);
 
-module.exports = AnalyticsSchema
+module.exports = AnalyticsSchema;

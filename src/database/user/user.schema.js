@@ -1,10 +1,10 @@
 /**
  * Global dependencies
  */
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-const IntegerValidator = require('mongoose-integer')
-require('mongoose-type-email')
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const IntegerValidator = require('mongoose-integer');
+require('mongoose-type-email');
 
 const UserSchema = new Schema({
   _id: {
@@ -141,11 +141,11 @@ const UserSchema = new Schema({
     type: Schema.Types.Boolean,
     default: false,
   },
-}, { collection: 'user' })
+}, { collection: 'user' });
 
 /**
  * Enable plugins
  */
-UserSchema.plugin(IntegerValidator)
+UserSchema.plugin(IntegerValidator);
 
-module.exports = UserSchema
+module.exports = UserSchema;

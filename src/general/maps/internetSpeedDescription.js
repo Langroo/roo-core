@@ -4,4 +4,4 @@ module.exports = {
   Ok_Internet: 'Ok Internet Connection',
   Good_Internet: 'Good Internet Connection',
   Great_Internet: 'Great Internet Connection',
-}
+};

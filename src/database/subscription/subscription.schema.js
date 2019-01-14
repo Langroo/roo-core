@@ -1,9 +1,9 @@
 /**
  * Global dependencies
  */
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-require('mongoose-type-email')
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+require('mongoose-type-email');
 
 /**
  * Subscription Schema
@@ -43,7 +43,7 @@ const SubscriptionSchema = new Schema({
     type: Schema.Types.String,
     required: [true, 'currency is required'],
     default: null,
-  }
-}, { collection: 'subscription' })
+  },
+}, { collection: 'subscription' });
 
-module.exports = SubscriptionSchema
+module.exports = SubscriptionSchema;

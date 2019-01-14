@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const ScheduleSchema = new Schema({
   _id: {
@@ -36,6 +36,6 @@ const ScheduleSchema = new Schema({
     content: Schema.Types.Mixed,
     trigger: Schema.Types.String,
   }],
-}, { collection: 'schedule' })
+}, { collection: 'schedule' });
 
-module.exports = ScheduleSchema
+module.exports = ScheduleSchema;
