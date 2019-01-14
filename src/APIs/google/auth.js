@@ -3,7 +3,7 @@
  */
 const fs = require('fs');
 const readline = require('readline');
-const googleAuth = require('google-auth-library');
+const { GoogleAuth } = require('google-auth-library');
 require('dotenv').config();
 
 // -- GOOGLE Credentials
@@ -29,7 +29,7 @@ class Auth {
   }
 
   authorizeJWT(credentials) {
-    const auth = new googleAuth();
+    const auth = new GoogleAuth();
 
     return new Promise((resolve, reject) => {
       // Check if we have previously stored a token.
@@ -42,7 +42,7 @@ class Auth {
         SCOPES,
       );
 
-      jwtClient.authorize((error, credentials) => {
+      jwtClient.authorize((error, _credentials) => {
         if (error) {
           console.log('Authorize error...', error);
         } else {
@@ -56,7 +56,7 @@ class Auth {
     const clientSecret = credentials.installed.client_secret;
     const clientId = credentials.installed.client_id;
     const redirectUrl = process.env.REDIRECT_URL === null || process.env.REDIRECT_URL === undefined ? credentials.installed.redirect_uris[0] : process.env.REDIRECT_URL;
-    const auth = new googleAuth();
+    const auth = new GoogleAuth();
     const oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
     return new Promise((resolve, reject) => {
@@ -65,8 +65,8 @@ class Auth {
         if (err) {
           this.getNewToken(oauth2Client).then((oauth2ClientNew) => {
             resolve(oauth2ClientNew);
-          }, (err) => {
-            reject(err);
+          }, (e) => {
+            reject(e);
           });
         } else {
           oauth2Client.credentials = JSON.parse(token);
@@ -106,7 +106,7 @@ class Auth {
     try {
       fs.mkdirSync(TOKEN_DIR);
     } catch (err) {
-      if (err.code != 'EEXIST') {
+      if (err.code !== 'EEXIST') {
         throw err;
       }
     }
