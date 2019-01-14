@@ -5,11 +5,10 @@ const mongoose = require('mongoose');
 /**
  * Local Dependencies
  * */
-const UsersManagement = require('../../database/index').UsersManagement;
+const { UsersManagement } = require('../../database/index');
 const userCollection = mongoose.connection.collection('user');
 
 class messaging {
-
   static async removeUserFromLabel(senderId, LabelName) {
     let labelId;
     const labelsIdsArray = (await axios.get(`${process.env.FB_BASE_URL}/${process.env.FB_VERSION}/me/custom_labels?fields=name&access_token=${process.env.FB_ACCESS_TOKEN}`)).data.data;
@@ -59,11 +58,11 @@ class messaging {
   static async monthlyActiveUsers() {
     const MAUCursor = await userCollection.find({
       lastInteraction: {
- $gte: new Date(((new Date()).getTime()) - 2592000000),
-        $lte: new Date((new Date()).getTime()) 
-},
-      'subscription.status': 'ACTIVE' 
-}).count();
+        $gte: new Date(((new Date()).getTime()) - 2592000000),
+        $lte: new Date((new Date()).getTime()),
+      },
+      'subscription.status': 'ACTIVE',
+    }).count();
     const MAU = MAUCursor;
     return MAU;
   }
@@ -76,11 +75,11 @@ class messaging {
     for (let i = 0; i < daysForAverage; i++) {
       DAUCursor = await userCollection.find({
         lastInteraction: {
- $gte: new Date(((new Date()).getTime()) - ((i + 1) * 86400000)),
-          $lte: new Date((new Date()).getTime()) 
-},
-        'subscription.status': 'ACTIVE' 
-}).count();
+          $gte: new Date(((new Date()).getTime()) - ((i + 1) * 86400000)),
+          $lte: new Date((new Date()).getTime()),
+        },
+        'subscription.status': 'ACTIVE',
+      }).count();
       valuesPerDay[i] = DAUCursor;
     }
     average = (valuesPerDay.reduce((acc, val) => acc + val)) / daysForAverage;
@@ -91,11 +90,11 @@ class messaging {
   static async registrationsLast24Hours() {
     const registrationsCursor = await userCollection.find({
       FirstSubscriptionDate: {
- $gte: new Date(((new Date()).getTime()) - 86400000),
-        $lte: new Date((new Date()).getTime()) 
-},
-      'subscription.status': 'ACTIVE' 
-}).count();
+        $gte: new Date(((new Date()).getTime()) - 86400000),
+        $lte: new Date((new Date()).getTime()),
+      },
+      'subscription.status': 'ACTIVE',
+    }).count();
     const registrations = registrationsCursor;
     return registrations;
   }
@@ -146,7 +145,6 @@ class messaging {
   }
 
   static async createBroadcastLabel() {
-
     const labelsToCreate = ['UNREGISTERED', 'ACTIVE', 'INACTIVE', 'UNSUBSCRIBED', 'BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
 
     // -- Delete current broadcast labels if there are any
@@ -166,7 +164,6 @@ class messaging {
   }
 
   static async userStatusLabels() {
-
     let labelName;
     let labelId;
     let userAssigned;
@@ -180,7 +177,6 @@ class messaging {
     const existingLabels = await this.retrieveBroadcastLabel();
     // -- Assign each user in the database to a label
     await this.asyncForEach(usersList, async (user) => {
-
       if (user.subscription.status === 'UNREGISTERED') {
         labelName = 'UNREGISTERED';
       } else if (user.subscription.status === 'UNSUBSCRIBED') {
@@ -194,13 +190,13 @@ class messaging {
         await this.asyncForEach(existingLabels, async (element) => {
           if (labelName === element.name) {
             if (labelName === 'UNREGISTERED') {
-              unregisteredUsers++;
+              unregisteredUsers += 1;
             } else if (labelName === 'UNSUBSCRIBED') {
-              unsubscribedUsers++;
+              unsubscribedUsers += 1;
             } else if (labelName === 'ACTIVE') {
-              activeUsers++;
+              activeUsers += 1;
             } else if (labelName === 'INACTIVE') {
-              inactiveUsers++;
+              inactiveUsers += 1;
             }
             labelId = element.id;
             if (user.senderId) {
@@ -214,7 +210,7 @@ class messaging {
           }
         });
         if (userAssigned) {
-          successfullyAssigned++;
+          successfullyAssigned += 1;
         } else {
           statusUnknown.push(user.name.full_name);
         }
@@ -226,7 +222,6 @@ class messaging {
   }
 
   static async userLevelLabels() {
-
     let labelName;
     let labelId;
     let userAssigned;
@@ -239,16 +234,13 @@ class messaging {
     const existingLabels = await this.retrieveBroadcastLabel();
     // -- Assign each user in the database to a label
     await this.asyncForEach(usersList, async (user) => {
-
       // -- Verify that the data from the database is consistent
       // -- This is according to the current model of User in MongoDB
       // -- Current correctUser must be user.content.plan.accent & user.content.plan.level
       let correctUser = user.content;
       correctUser ? correctUser = correctUser.plan : correctUser = {};
-      correctUser || correctUser = {}
 
       if (correctUser.level) {
-
         if (user.content.plan.level === 'beginner') {
           labelName = 'BEGINNER';
         } else if (user.content.plan.level === 'intermediate') {
@@ -260,11 +252,11 @@ class messaging {
           await this.asyncForEach(existingLabels, async (element) => {
             if (labelName === element.name) {
               if (labelName === 'BEGINNER') {
-                userBeginnerCount++;
+                userBeginnerCount += 1;
               } else if (labelName === 'INTERMEDIATE') {
-                userIntermediateCount++;
+                userIntermediateCount += 1;
               } else if (labelName === 'ADVANCED') {
-                userAdvancedCount++;
+                userAdvancedCount += 1;
               }
               labelId = element.id;
               if (user.senderId) {
@@ -279,11 +271,10 @@ class messaging {
           });
 
           if (userAssigned) {
-            successfullyAssigned++;
+            successfullyAssigned += 1;
           } else {
             userNotAssigned.push(user.name.full_name);
           }
-
         } catch (error) {
           if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') { console.log('Error Sending REQUEST to Facebook ::\n', error.response.data); }
         }
@@ -309,7 +300,6 @@ class messaging {
       if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') { console.log('(╯°□°）╯︵ ┻━┻ ERROR sending the notification to SLACK :: ', reason); }
     }
   }
-
 }
 
 module.exports = {
