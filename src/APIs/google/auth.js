@@ -3,7 +3,7 @@
  */
 const fs = require('fs');
 const readline = require('readline');
-const { GoogleAuth } = require('google-auth-library');
+const { GoogleAuth, JWT } = require('google-auth-library');
 require('dotenv').config();
 
 // -- GOOGLE Credentials
@@ -29,13 +29,12 @@ class Auth {
   }
 
   authorizeJWT(credentials) {
-    const auth = new GoogleAuth();
 
     return new Promise((resolve, reject) => {
       // Check if we have previously stored a token.
       const token = require('./credentials/jwt');
 
-      const jwtClient = new auth.JWT(
+      const jwtClient = new JWT(
         token.client_email,
         null,
         token.private_key,
