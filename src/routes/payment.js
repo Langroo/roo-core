@@ -10,9 +10,9 @@ require('dotenv').config();
  * Local dependencies
  */
 const paypal = require('../payment/index').PaypalAPI;
-const PlanManagement = require('../database/index').PlanManagement;
-const PaymentController = require('../payment/index').PaymentController;
-const RooWebhook = require('../webhooks/index').RooWebhook;
+const { PlanManagement } = require('../database/index');
+const { PaymentController } = require('../payment/index');
+const { RooWebhook } = require('../webhooks/index');
 
 /**
  * Auxiliar data structure
@@ -56,19 +56,13 @@ router.get('/:type/:conversationId/:currency', async (request, response, next) =
     console.log('Stripe Payment initiated by user [- %s -]', conversationId);
 
     // -- Generating entire description
-    let amount;
-    let description;
     const key = process.env.STRIPE_PUBLIC_KEY;
-    let title;
-    let detail;
 
     const plan = await PlanManagement.retrieve({ query: { _id: planId }, findOne: true });
 
     // -- The amount is billed every two weeks, so it gets multiplied by two
-    amount = plan.price * 2;
-    description = plan.description;
-    title = plan.name;
-    detail = plan.detail;
+    const amount = plan.price * 2;
+    const { description, name, detail } = plan;
 
     if (currencyValue === 'usd') {
       currencySymbol = '$';
@@ -89,7 +83,7 @@ router.get('/:type/:conversationId/:currency', async (request, response, next) =
         symbol: currencySymbol,
       },
       key,
-      title,
+      title: name,
       description,
       conversationId,
       planId,
@@ -106,7 +100,7 @@ router.get('/:type/:conversationId/:currency', async (request, response, next) =
  */
 router.post('/cancel', async (request, response) => {
   // -- Prepare variables
-  const conversationId = request.body.conversationId;
+  const { conversationId } = request.body;
 
   try {
     // -- Check variables integrity
@@ -164,18 +158,12 @@ router.get('/success', async (request, response) => {
  */
 router.get('/error', async (request, response) => (
   // -- Prepare variables
-  response.status(200).render('payment/error', { layout: false })
-                                                        )
-                                                                                )
-                                                     )
-                                       )
-                                     ),
-);
+  response.status(200).render('payment/error', { layout: false })));
 
 /**
  * ------------------------------- Stripe routes --------------------------------
  */
-router.post('/charge', async (request, response) => ( {
+router.post('/charge', async (request, response) => {
   // -- Prepare data
   const data = {
     token: request.body.stripeToken,
@@ -212,8 +200,8 @@ router.post('/charge', async (request, response) => ( {
 /**
  * Company Subscription
  */
-router.post('/company-subscription', async (request, response) => ( {
-  const body = request.body;
+router.post('/company-subscription', async (request, response) => {
+  const { body } = request;
   console.log('Body is :: ', body);
 
   try {
@@ -221,8 +209,8 @@ router.post('/company-subscription', async (request, response) => ( {
     response.status(200);
     response.statusMessage = 'subscription created succesfully';
     return response.json({
-		    statusMessage: response.statusMessage,
-		    statusCode: response.statusCode,
+      statusMessage: response.statusMessage,
+      statusCode: response.statusCode,
       data: null,
     });
   } catch (error) {
@@ -231,8 +219,8 @@ router.post('/company-subscription', async (request, response) => ( {
     response.status(500);
     response.statusMessage = error.toString();
     return response.json({
-		    statusMessage: response.statusMessage,
-		    statusCode: response.statusCode,
+      statusMessage: response.statusMessage,
+      statusCode: response.statusCode,
       data: null,
     });
   }
@@ -241,7 +229,7 @@ router.post('/company-subscription', async (request, response) => ( {
 /**
  * -------------------------------------- Paypal payment ----------------------------------
  */
-router.get('/paypal/:type/:conversationId/:currency', async (request, response, next) => ( {
+router.get('/paypal/:type/:conversationId/:currency', async (request, response, next) => {
   const type = request.params.type || '';
   const conversationId = request.params.conversationId || '';
   const currency = request.params.currency.toUpperCase() || '';
@@ -283,15 +271,13 @@ router.get('/paypal/:type/:conversationId/:currency', async (request, response, 
   }
 });
 
-router.get('/paypal/success', async (request, response, next) => ( {
+router.get('/paypal/success', async (request, response, next) => {
   console.log('Paypal Payment success');
   const paymentDetails = await paypal.getPaymentInfo(request.query.paymentId);
   const transaction = paymentDetails.transactions[0];
 
   // -- User data
-  const description = transaction.description;
-  const conversationId = transaction.custom;
-  const amount = transaction.amount;
+  const { description, custom, amount } = transaction;
 
   // -- Execute payment
   try {
