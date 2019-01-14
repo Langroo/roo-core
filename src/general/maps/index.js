@@ -4,4 +4,4 @@ module.exports = {
   TimeOfDay: require('./timeOfDay'),
   TimeOfWeek: require('./timeOfWeek'),
   InternetSpeedDescription: require('./internetSpeedDescription'),
-}
+};

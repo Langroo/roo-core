@@ -1,11 +1,11 @@
 /**
  * GLOBAL ID's
  */
-const sheetsStudentsId = process.env.SHEETS_STUDENTS_ID
-const sheetsContentId = process.env.SHEETS_CONTENT_ID
-const sheetsAnalyticsId = process.env.SHEETS_ANALYTICS_ID
-const sheetsMetricsId = process.env.SHEETS_METRICS_ID
-const sheetsMasterCRM = process.env.SHEETS_MASTER_CRM
+const sheetsStudentsId = process.env.SHEETS_STUDENTS_ID;
+const sheetsContentId = process.env.SHEETS_CONTENT_ID;
+const sheetsAnalyticsId = process.env.SHEETS_ANALYTICS_ID;
+const sheetsMetricsId = process.env.SHEETS_METRICS_ID;
+const sheetsMasterCRM = process.env.SHEETS_MASTER_CRM;
 
 module.exports = {
   models: {
@@ -993,4 +993,4 @@ module.exports = {
       },
     },
   },
-}
+};

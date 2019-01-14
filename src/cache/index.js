@@ -1,1 +1,1 @@
-module.exports = require('./management')
+module.exports = require('./management');

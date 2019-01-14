@@ -1,16 +1,16 @@
 /**
  * Global dependencies
  */
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 /**
  * Local dependencies
  */
-const PronunciationSchema = require('./pronunciation.schema')
+const PronunciationSchema = require('./pronunciation.schema');
 
 /**
  * Declare model
  */
-const PronunciationModel = mongoose.model('PronunciationModel', PronunciationSchema)
+const PronunciationModel = mongoose.model('PronunciationModel', PronunciationSchema);
 
-module.exports = PronunciationModel
+module.exports = PronunciationModel;

@@ -24,6 +24,6 @@ const LoginSchema = new Schema({
     type: Schema.Types.String,
     required: [true, 'Name is required'],
   },
-}, {collection: 'login'});
+}, { collection: 'login' });
 
 module.exports = LoginSchema;

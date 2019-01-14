@@ -5,4 +5,4 @@ module.exports = {
   TFB_AFTERNOON_ALT: 'Afternoons',
   TFB_EVENING: 'Evenings',
   TFB_EVENING_ALT: 'Evenings',
-}
+};

@@ -1,9 +1,9 @@
 /**
  * Global dependencies
  */
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-require('mongoose-type-email')
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+require('mongoose-type-email');
 
 /**
  * Pronunciation Schema
@@ -14,22 +14,22 @@ require('mongoose-type-email')
  * @param url => Pronounce URL on AWS bucket
  */
 const PronunciationSchema = new Schema({
-    user_id: {
-        type: Schema.Types.String,
-        required: [true, 'User ID is required']
-    },
-    statement: {
-        type: Schema.Types.String,
-        required: [true, 'Statement is required']
-    },
-    date: {
-        type: Schema.Types.Date,
-        default: Date.now()
-    },
-    url: {
-        type: Schema.Types.String,
-        required: [true, 'Amazon URL reference is needed']
-    }
+  user_id: {
+    type: Schema.Types.String,
+    required: [true, 'User ID is required'],
+  },
+  statement: {
+    type: Schema.Types.String,
+    required: [true, 'Statement is required'],
+  },
+  date: {
+    type: Schema.Types.Date,
+    default: Date.now(),
+  },
+  url: {
+    type: Schema.Types.String,
+    required: [true, 'Amazon URL reference is needed'],
+  },
 }, { collection: 'pronunciation' });
 
-module.exports = PronunciationSchema
+module.exports = PronunciationSchema;

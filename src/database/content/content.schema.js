@@ -1,9 +1,9 @@
 /**
  * Global dependencies
  */
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-const IntegerValidator = require('mongoose-integer')
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const IntegerValidator = require('mongoose-integer');
 
 /**
  * Content Schema
@@ -36,11 +36,11 @@ const ContentSchema = new Schema({
     type: Schema.Types.Boolean,
     default: false,
   },
-}, { collection: 'content' })
+}, { collection: 'content' });
 
 /**
  * Enable plugins
  */
-ContentSchema.plugin(IntegerValidator)
+ContentSchema.plugin(IntegerValidator);
 
-module.exports = ContentSchema
+module.exports = ContentSchema;

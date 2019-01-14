@@ -6,4 +6,4 @@ module.exports = {
   string: require('./string'),
   slack: require('./slack'),
   broadcastQuiz: require('./broadcast-quiz'),
-}
+};

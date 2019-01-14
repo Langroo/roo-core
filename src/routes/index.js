@@ -7,4 +7,4 @@ module.exports = {
   payment: require('./payment'),
   tutorRequest: require('./tutor_request'),
   broadcastMessages: require('./broadcast'),
-}
+};

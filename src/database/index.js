@@ -10,4 +10,4 @@ module.exports = {
   PronunciationManagement: require('./pronunciation').management,
   AnalyticsManagement: require('./analytics').management,
   MetricsManagement: require('./metric').management,
-}
+};

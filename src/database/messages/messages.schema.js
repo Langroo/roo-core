@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 // -- Define the schema
 /*
@@ -10,15 +10,15 @@ const Schema = mongoose.Schema
 * @category: reply, broadcast, content
 * */
 const messagesSchema = new Schema({
-    position_in_dialogue: { type: Schema.Types.String, default: '0' },
-    dialogue_name: { type: Schema.Types.String, default: 'HelloWorld' },
-    content: { type: Schema.Types.String, required: false, default: 'Hello World!' },
-    type: { type: Schema.Types.String, required: false, default: 'text' },
-    category: { type: Schema.Types.String, required: false, default: 'reply' },
-  },
-  { collection: 'messages' })
+  position_in_dialogue: { type: Schema.Types.String, default: '0' },
+  dialogue_name: { type: Schema.Types.String, default: 'HelloWorld' },
+  content: { type: Schema.Types.String, required: false, default: 'Hello World!' },
+  type: { type: Schema.Types.String, required: false, default: 'text' },
+  category: { type: Schema.Types.String, required: false, default: 'reply' },
+},
+{ collection: 'messages' });
 
 // -- Create the model of the Schema in Mongo
-const messagesModel = mongoose.model('messagesModel', messagesSchema)
+const messagesModel = mongoose.model('messagesModel', messagesSchema);
 
-module.exports = messagesModel
+module.exports = messagesModel;

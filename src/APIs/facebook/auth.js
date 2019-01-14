@@ -1,40 +1,39 @@
 /**
  * Dependencies
  */
-const mongoose = require('mongoose')
-const FacebookStrategy = require('passport-facebook').Strategy
-const crypto = require('crypto')
-const generateHash = (str) => crypto.createHash('md5').update(str).digest('hex')
+const mongoose = require('mongoose');
+const FacebookStrategy = require('passport-facebook').Strategy;
+const crypto = require('crypto');
+const generateHash = str => crypto.createHash('md5').update(str).digest('hex');
 
 /**
  * Local dependencies
  */
-const facebookAuth = require('./credentials/token')
-const flowCollection = mongoose.connection.collection('dialogues')
-const LoginManagement = require('../../database/index').LoginManagement
-const UsersManagement = require('../../database/index').UsersManagement
-const FacebookUsers = require('./users')
-const googlesheet = require('../google/index')
-const redis = require('../../cache/index')
-const Messages = require('../../dialogues/dialogues-content').dialoguesContent
-const basicSender = require('../../dialogues/dialogues-builder').basicSender
-const maps = require('../../general/index').maps
+const facebookAuth = require('./credentials/token');
+const flowCollection = mongoose.connection.collection('dialogues');
+const LoginManagement = require('../../database/index').LoginManagement;
+const UsersManagement = require('../../database/index').UsersManagement;
+const FacebookUsers = require('./users');
+const googlesheet = require('../google/index');
+const redis = require('../../cache/index');
+const Messages = require('../../dialogues/dialogues-content').dialoguesContent;
+const basicSender = require('../../dialogues/dialogues-builder').basicSender;
+const maps = require('../../general/index').maps;
 
 module.exports = function (passport) {
-
   passport.serializeUser((user, done) => {
-    done(null, user.id)
-  })
+    done(null, user.id);
+  });
 
   passport.deserializeUser(async (id, done) => {
     try {
-      const serializedUser = await LoginManagement.retrieve({ id }, true)
-      done(null, serializedUser)
+      const serializedUser = await LoginManagement.retrieve({ id }, true);
+      done(null, serializedUser);
     } catch (error) {
-      console.log('Deserialize user error...', error)
-      done(error)
+      console.log('Deserialize user error...', error);
+      done(error);
     }
-  })
+  });
 
   passport.use('facebook', new FacebookStrategy({
     display: 'popup',
@@ -44,42 +43,41 @@ module.exports = function (passport) {
     passReqToCallback: true,
   }, (request, accessToken, refreshToken, profile, done) => { // GLOBAL FUNCTION
     process.nextTick(async () => {
-
       // Variables
-      let loginUser
-      let user
-      let facebookRequest
-      let userCache
-      let messageBuilder
-      let fbUser
-      let userData
-      let loginObject
+      let loginUser;
+      let user;
+      let facebookRequest;
+      let userCache;
+      let messageBuilder;
+      let fbUser;
+      let userData;
+      let loginObject;
 
       try {
         // -- Check in DB if user already exist
-        loginUser = await LoginManagement.retrieve({ _id: profile.id }, true)
+        loginUser = await LoginManagement.retrieve({ _id: profile.id }, true);
         if (loginUser === null || loginUser === undefined) {
-          throw new Error('User does not exist')
+          throw new Error('User does not exist');
         }
 
         // -- User already exist
         try {
           // -- Sanity Check
           if (!request.senderId) {
-            throw new Error('Sender ID must be defined')
+            throw new Error('Sender ID must be defined');
           }
 
           // -- Get user information
           user = await UsersManagement.retrieve({
             query: { _id: generateHash(request.senderId) },
             findOne: true,
-          })
+          });
 
-          facebookRequest = new FacebookUsers(profile.id, accessToken, process.env.FB_ACCESS_TOKEN)
+          facebookRequest = new FacebookUsers(profile.id, accessToken, process.env.FB_ACCESS_TOKEN);
           if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-            console.log('[facebook auth | User senderId (%s)]', request.senderId)
+            console.log('[facebook auth | User senderId (%s)]', request.senderId);
           }
-          userCache = await redis.hashGetUser(generateHash(request.senderId))
+          userCache = await redis.hashGetUser(generateHash(request.senderId));
 
           // -- Update Database (user goes to day one and week one)
           await UsersManagement.update(user._id, {
@@ -98,82 +96,81 @@ module.exports = function (passport) {
               userCache.sourceValue != undefined
               || userCache.sourceValue != null
               || userCache.sourceValue != '' ? userCache.sourceValue : '',
-          })
+          });
 
           if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-            console.log('User Re-SubscriptionDate :: [ %s ]', new Date().toUserTimezone(user.location.timezone).toString())
+            console.log('User Re-SubscriptionDate :: [ %s ]', new Date().toUserTimezone(user.location.timezone).toString());
           }
 
           // -- Update user dialogues
-          await flowCollection.findOneAndUpdate({ conversation_id: user.senderId }, { $set: { open_question: true } }, { new: true })
+          await flowCollection.findOneAndUpdate({ conversation_id: user.senderId }, { $set: { open_question: true } }, { new: true });
 
           // -- Send messages for final dialogues when user subscribes again to Langroo
-          messageBuilder = new basicSender(user.senderId)
-          await messageBuilder.sendMessages(Messages.firstSubscribeLangroo.map(message => {
+          messageBuilder = new basicSender(user.senderId);
+          await messageBuilder.sendMessages(Messages.firstSubscribeLangroo.map((message) => {
             // -- Personalize alternative messages
             if (message.type === 'text') {
-              message.content = message.content.replace(/{{name}}/g, user.name.short_name)
+              message.content = message.content.replace(/{{name}}/g, user.name.short_name);
             }
-            return message
-          }))
+            return message;
+          }));
 
           // -- User is logged in
-          return done(null, user)
+          return done(null, user);
         } catch (error) {
-          console.log('An error occurred on re-login ::\n', error.response.data)
+          console.log('An error occurred on re-login ::\n', error.response.data);
         }
-
       } catch (error) {
         if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-          console.log('New user, register creation initiated')
+          console.log('New user, register creation initiated');
         }
         // console.log(request);
         if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-          console.log('Request body :: ', request.body)
+          console.log('Request body :: ', request.body);
         }
         if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-          console.log('Request params :: ', request.params)
+          console.log('Request params :: ', request.params);
         }
         if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-          console.log('Request query :: ', request.query)
+          console.log('Request query :: ', request.query);
         }
         if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-          console.log('Sender ID :: ', request.senderId)
+          console.log('Sender ID :: ', request.senderId);
         }
         if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-          console.log('Access token :: ', accessToken)
+          console.log('Access token :: ', accessToken);
         }
         if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-          console.log('Refresh token :: ', refreshToken)
+          console.log('Refresh token :: ', refreshToken);
         }
         if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-          console.log('Profile :: ', profile)
+          console.log('Profile :: ', profile);
         }
         if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-          console.log('Done :: ', done)
+          console.log('Done :: ', done);
         }
         // -- User does not exist, let's create it
 
         try {
-          facebookRequest = new FacebookUsers(profile.id, accessToken, process.env.FB_ACCESS_TOKEN)
-          const senderIdResponse = await facebookRequest.getSenderId()
+          facebookRequest = new FacebookUsers(profile.id, accessToken, process.env.FB_ACCESS_TOKEN);
+          const senderIdResponse = await facebookRequest.getSenderId();
           if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-            console.log('Sender ID response is :: ', senderIdResponse)
+            console.log('Sender ID response is :: ', senderIdResponse);
           }
 
           // -- Retrieve user data (profile, education, music and games)
-          fbUser = await facebookRequest.retrieve()
+          fbUser = await facebookRequest.retrieve();
           if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-            console.log('[facebook auth | User senderId (%s)]', request.senderId)
+            console.log('[facebook auth | User senderId (%s)]', request.senderId);
           }
-          userCache = await redis.hashGetUser(generateHash(request.senderId))
+          userCache = await redis.hashGetUser(generateHash(request.senderId));
 
           // -- Sanity Check
           if (!request.senderId) {
-            throw new Error('Sender ID must be defined')
+            throw new Error('Sender ID must be defined');
           }
 
-                    /* -- FACEBOOK PERMISSION NEEDED TO USE THIS PART --
+          /* -- FACEBOOK PERMISSION NEEDED TO USE THIS PART --
 
                     let fbEducation = await Promise.all(fbUser["education"].map(education => {
                         return new FacebookPages(education["school"]["id"], accessToken, process.env.FB_ACCESS_TOKEN).retrieve();
@@ -183,7 +180,7 @@ module.exports = function (passport) {
                     }));
                     let fbMusic = await Promise.all(fbUser["music"]["data"].map(artist => {
                         return new FacebookPages(artist["id"], accessToken, process.env.FB_ACCESS_TOKEN).retrieve();
-                    }));*/
+                    })); */
 
           // -- Format user data structure
           userData = {
@@ -226,26 +223,24 @@ module.exports = function (passport) {
               },
             },
             FirstSubscriptionDate: new Date().toUserTimezone(fbUser.timezone),
-          }
-          userData.age = ~~((Date.now() - (Number(userData.birthday))) / (31557600000))
-          userData.source.from
-            = userCache.sourceFrom != undefined
+          };
+          userData.age = ~~((Date.now() - (Number(userData.birthday))) / (31557600000));
+          userData.source.from = userCache.sourceFrom != undefined
           || userCache.sourceFrom != null
-          || userCache.sourceFrom != '' ? userCache.sourceFrom : ''
-          userData.source.value
-            = userCache.sourceValue != undefined
+          || userCache.sourceFrom != '' ? userCache.sourceFrom : '';
+          userData.source.value = userCache.sourceValue != undefined
           || userCache.sourceValue != null
-          || userCache.sourceValue != '' ? userCache.sourceValue : ''
+          || userCache.sourceValue != '' ? userCache.sourceValue : '';
           if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-            console.log('User FirstSubscriptionDate :: [ %s ]', userData.FirstSubscriptionDate.toString())
+            console.log('User FirstSubscriptionDate :: [ %s ]', userData.FirstSubscriptionDate.toString());
           }
 
           // -- Saving step
           // -- Save user in mongo db
-          await UsersManagement.create(userData, { updateIfExist: true })
+          await UsersManagement.create(userData, { updateIfExist: true });
         } catch (err) {
-          console.log('An error ocurred in passport login...', err)
-          return done(err)
+          console.log('An error ocurred in passport login...', err);
+          return done(err);
         }
 
         try {
@@ -254,43 +249,41 @@ module.exports = function (passport) {
             _id: profile.id,
             token: accessToken,
             name: profile.displayName,
-          })
+          });
         } catch (err) {
-          console.log('An error ocurred in login creation in MongoDb ::', err)
-          return done(err)
+          console.log('An error ocurred in login creation in MongoDb ::', err);
+          return done(err);
         }
 
         try {
           // -- Google sheet
-          const profileSheet = new googlesheet('profile')
+          const profileSheet = new googlesheet('profile');
 
           // -- Delete from profile
-          await profileSheet.delete()
+          await profileSheet.delete();
 
           // -- Save users profiles in googlesheets
           // -- REMEMBER TO REMOVE THIS LATER (TOO SLOW)
-          const users = (await UsersManagement.retrieve()).map(user => {
-            return {
-              name: user.name.full_name,
-              first_name: user.name.first_name,
-              last_name: user.name.last_name,
-              picture: user.picture,
-              age: user.age,
-              birthday: user.birthday,
-              gender: user.gender,
-              language: user.language,
-              location: user.location.name,
-              profile_link: user.profile_link,
-              email: user.email,
-              date_message_us: user.FirstSubscriptionDate,
-              value: user.source.value,
-              product: maps.ProductEnum[user.subscription.product],
-              date_updated: new Date(),
-            }
-          })
-          await profileSheet.create(users)
+          const users = (await UsersManagement.retrieve()).map(user => ({
+            name: user.name.full_name,
+            first_name: user.name.first_name,
+            last_name: user.name.last_name,
+            picture: user.picture,
+            age: user.age,
+            birthday: user.birthday,
+            gender: user.gender,
+            language: user.language,
+            location: user.location.name,
+            profile_link: user.profile_link,
+            email: user.email,
+            date_message_us: user.FirstSubscriptionDate,
+            value: user.source.value,
+            product: maps.ProductEnum[user.subscription.product],
+            date_updated: new Date(),
+          }));
+          await profileSheet.create(users);
 
-                  /* -- FACEBOOK PERMISSION NEEDED TO USE THIS PART --
+          /* -- FACEBOOK PERMISSION NEEDED TO USE THIS PART --
 
                   await (new googlesheet("education")).create(
                       userData.education.map((education, index) => {
@@ -325,10 +318,10 @@ module.exports = function (passport) {
                               page_link: game.link
                           };
                       })
-                  );*/
+                  ); */
         } catch (err) {
-          console.log('An error occurred in user profile creation in Google Sheets ::', err)
-          return done(err)
+          console.log('An error occurred in user profile creation in Google Sheets ::', err);
+          return done(err);
         }
 
         try {
@@ -336,27 +329,27 @@ module.exports = function (passport) {
           user = await UsersManagement.retrieve({
             query: { _id: loginObject._id },
             findOne: true,
-          })
+          });
 
           // -- Update user dialogues
-          await flowCollection.findOneAndUpdate({ conversation_id: user.senderId }, { $set: { open_question: true } }, { new: true })
+          await flowCollection.findOneAndUpdate({ conversation_id: user.senderId }, { $set: { open_question: true } }, { new: true });
 
-          messageBuilder = new basicSender(user.senderId, user.conversationId)
-          await messageBuilder.sendMessages(Messages.firstSubscribeLangroo.map(message => {
+          messageBuilder = new basicSender(user.senderId, user.conversationId);
+          await messageBuilder.sendMessages(Messages.firstSubscribeLangroo.map((message) => {
             // -- Personalize alternative messages
             if (message.type === 'text') {
-              message.content = message.content.replace(/{{name}}/g, fbUser.first_name)
+              message.content = message.content.replace(/{{name}}/g, fbUser.first_name);
             }
-            return message
-          }))
+            return message;
+          }));
         } catch (error) {
-          console.log('An error ocurred sending messages after first registration ::', error)
-          return done(error)
+          console.log('An error ocurred sending messages after first registration ::', error);
+          return done(error);
         }
 
         // -- Passport JS login
-        return done(null, loginObject)
+        return done(null, loginObject);
       }
-    })
-  }))
-}
+    });
+  }));
+};

@@ -7,10 +7,10 @@
  * Errors in core functionalities: on-demand content, profile creation, payment reception
  */
 
-const axios = require('axios')
+const axios = require('axios');
 
 const notifyError = (message, culprit) => {
-  const url = process.env.DEPLOYMENT_INFO_SLACK_URL
+  const url = process.env.DEPLOYMENT_INFO_SLACK_URL;
   const data = {
     icon_emoji: ':x:',
     username: 'ROO API',
@@ -46,24 +46,25 @@ const notifyError = (message, culprit) => {
         ts: 123456789,
       },
     ],
-  }
+  };
   axios(
     {
       url,
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       data: JSON.stringify(data),
-    })
+    },
+  )
     .then(() => {
       if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-        console.info('\nReport sent successfully to Slack\n')
+        console.info('\nReport sent successfully to Slack\n');
       }
     })
-    .catch(err => console.log('(╯°□°）╯︵ ┻━┻ ERROR SENDING MESSAGE TO SLACK X_X :: ', err))
-}
+    .catch(err => console.log('(╯°□°）╯︵ ┻━┻ ERROR SENDING MESSAGE TO SLACK X_X :: ', err));
+};
 
 const notifyPayment = (message, userName, amount, currency) => {
-  const url = process.env.PAYMENT_NOTIFICATIONS_SLACK_URL
+  const url = process.env.PAYMENT_NOTIFICATIONS_SLACK_URL;
   const data = {
     icon_emoji: ':x:',
     username: 'ROO API',
@@ -89,22 +90,23 @@ const notifyPayment = (message, userName, amount, currency) => {
         ts: 123456789,
       },
     ],
-  }
+  };
   axios(
     {
       url,
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       data: JSON.stringify(data),
-    })
+    },
+  )
     .then(() => {
       if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
-        console.info('\nReport sent successfully to Slack\n')
+        console.info('\nReport sent successfully to Slack\n');
       }
     })
-    .catch(err => console.log('(╯°□°）╯︵ ┻━┻ ERROR SENDING MESSAGE TO SLACK X_X :: ', err))
-}
+    .catch(err => console.log('(╯°□°）╯︵ ┻━┻ ERROR SENDING MESSAGE TO SLACK X_X :: ', err));
+};
 
 module.exports = {
   notifyError,
-}
+};

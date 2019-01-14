@@ -1,10 +1,10 @@
 /**
  * Global dependencies
  */
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-const IntegerValidator = require('mongoose-integer')
-require('mongoose-type-email')
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const IntegerValidator = require('mongoose-integer');
+require('mongoose-type-email');
 
 /**
  * Plan Schema
@@ -29,7 +29,7 @@ const PlanSchema = new Schema({
   },
   description: {
     type: Schema.Types.String,
-    defaul: null
+    defaul: null,
   },
   detail: {
     type: [Schema.Types.String],
@@ -40,7 +40,7 @@ const PlanSchema = new Schema({
       period_type: {
         type: Schema.Types.String,
         required: [true, 'periodType is required'],
-        enum: ['day', 'week', 'month', 'year']
+        enum: ['day', 'week', 'month', 'year'],
       },
       period_quantity: {
         type: Schema.Types.Number,
@@ -60,8 +60,8 @@ const PlanSchema = new Schema({
   currency: {
     type: Schema.Types.String,
     required: [true, 'Currency is required'],
-    enum: ["USD", "EUR"],
-    default: "EUR"
+    enum: ['USD', 'EUR'],
+    default: 'EUR',
   },
   enabled: {
     type: Schema.Types.Boolean,
@@ -73,6 +73,6 @@ const PlanSchema = new Schema({
 /**
  * Enable plugins
  */
-PlanSchema.plugin(IntegerValidator)
+PlanSchema.plugin(IntegerValidator);
 
-module.exports = PlanSchema
+module.exports = PlanSchema;
