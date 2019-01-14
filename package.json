@@ -1,7 +1,7 @@
 {
-  "name": "langroo-api",
-  "version": "1.0.0",
-  "description": "Langroo API",
+  "name": "roo-core",
+  "version": "1.0.1",
+  "description": "Roo Core Manager",
   "main": "server.js",
   "scripts": {
     "start": "nodemon --watch src -e * --exec babel-node -- src/server.js --copy-files",
@@ -17,7 +17,8 @@
   "keywords": [
     "API",
     "Langroo",
-    "Heroku"
+    "Heroku",
+    "Core"
   ],
   "author": "Moisés Berenguer",
   "license": "ISC",
