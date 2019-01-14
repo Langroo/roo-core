@@ -1,7 +1,0 @@
-{
-    "name": "langroo-api",
-    "description": "Langroo API",
-    "repository": "https://github.com/langroo/langroo-api.git",
-    "keywords": ["API", "Langroo", "Heroku"],
-    "image": "heroku/nodejs"
-}

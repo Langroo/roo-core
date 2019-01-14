@@ -146,8 +146,6 @@ class Users {
             'locale',
             'timezone',
             'gender',
-            'is_payment_enabled',
-            'last_ad_referral',
           ].join(),
           access_token: process.env.FB_ACCESS_TOKEN,
         },
