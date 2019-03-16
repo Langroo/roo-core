@@ -1,7 +1,7 @@
 const remindersManagement = require('../database/index').RemindersManagement;
 const usersManagement = require('../database/index').UsersManagement;
 const moment = require('moment');
-const basicSender = require('../dialogues/dialogues-builder').basicSender;
+const { basicSender } = require('../dialogues/dialogues-builder');
 const redis = require('../cache/index');
 const nodeScheduler = require('node-schedule');
 const mongoose = require('mongoose');

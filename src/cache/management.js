@@ -45,7 +45,7 @@ class RedisManagement {
 
   async setUserCache(dataObject, propertyName) {
     try {
-      const userHash = dataObject.userHash;
+      const { userHash } = dataObject;
       const userValue = dataObject[propertyName];
 
       if (!userHash) { throw new Error('userHash missing in data object received'); }

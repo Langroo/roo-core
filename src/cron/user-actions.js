@@ -6,7 +6,7 @@ const cronjobScheduler = require('node-schedule');
 const redis = require('../cache/index');
 const facebookAPI = require('../APIs/facebook').apiCalls;
 
-const UsersManagement = require('../database/index').UsersManagement;
+const { UsersManagement } = require('../database/index');
 const scheduleCollection = mongoose.connection.collection('schedule');
 const usersCollection = mongoose.connection.collection('user');
 

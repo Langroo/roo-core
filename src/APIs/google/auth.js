@@ -29,7 +29,6 @@ class Auth {
   }
 
   authorizeJWT(credentials) {
-
     return new Promise((resolve, reject) => {
       // Check if we have previously stored a token.
       const token = require('./credentials/jwt');

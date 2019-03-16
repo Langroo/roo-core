@@ -6,7 +6,7 @@ const cronjobScheduler = require('node-schedule');
 const Raven = require('raven');
 const moment = require('moment');
 const util = require('util');
-const slack = require('../general/index').slack;
+const { slack } = require('../general/index');
 Raven.config('https://96d6795013a54f8f852719919378cc59@sentry.io/304046').install();
 
 // -- Promisify the string replace
@@ -14,14 +14,14 @@ util.promisify(String.prototype.split);
 /**
  * LOCAL dependencies
  */
-const basicSender = require('../dialogues/dialogues-builder').basicSender;
+const { basicSender } = require('../dialogues/dialogues-builder');
 const redis = require('../cache/index');
 
 /**
  * Management
  */
-const UsersManagement = require('../database/index').UsersManagement;
-const ScheduleManagement = require('../database/index').ScheduleManagement;
+const { UsersManagement } = require('../database/index');
+const { ScheduleManagement } = require('../database/index');
 
 /**
  * Collections
@@ -297,7 +297,7 @@ class ContentSystem {
         // -- Retrieve content
         const user = await usersCollection.findOne({ _id: userId });
         const language = `${user.content.plan.language}-${user.content.plan.level}-${user.content.plan.accent}`;
-        let current = user.content.current;
+        let { current } = user.content;
         const initialLesson = current.lesson;
         const initialMessage = current.message;
         const contentCursor = contentCollection.aggregate([
@@ -555,7 +555,7 @@ class ContentSystem {
           // -- Get previous messages
           const previousWeeksValues = [];
 
-          let messages = schedule.messages;
+          let { messages } = schedule;
           const messagesToBeSent = [];
 
           // -- Button logic

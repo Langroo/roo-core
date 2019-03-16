@@ -5,12 +5,12 @@
  */
 const mongoose = require('mongoose');
 const googlesheet = require('./sheet');
-const maps = require('../../general/index').maps;
+const { maps } = require('../../general/index');
 
 /** *
  * Auxiliary functions
  */
-const setTimeout = require('timers').setTimeout;
+const { setTimeout } = require('timers');
 const bufferSize = 1;
 const timeBetweenRequests = 4000;
 const messageTimer = ms => new Promise(resolve => setTimeout(resolve, ms));

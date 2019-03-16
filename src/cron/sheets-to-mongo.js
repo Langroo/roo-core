@@ -1,9 +1,9 @@
 /**
  * Global dependencies
  */
-const ContentManagement = require('../database/index').ContentManagement;
+const { ContentManagement } = require('../database/index');
 const googlesheet = require('../APIs/google');
-const basicSender = require('../dialogues/dialogues-builder').basicSender;
+const { basicSender } = require('../dialogues/dialogues-builder');
 
 /**
  * Content instances

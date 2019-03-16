@@ -8,7 +8,7 @@ require('dotenv').config();
 /**
  * Local dependencies
  */
-const TutorRequestManagement = require('../database/index').TutorRequestManagement;
+const { TutorRequestManagement } = require('../database/index');
 const redis = require('../cache/index');
 const CRM = require('../APIs/google/crm.management');
 
@@ -24,8 +24,8 @@ router.post('/cache/currentCountry', async (request, response) => {
    */
   try {
     // -- Prepare data
-    const userHash = request.body.userHash;
-    const currentCountry = request.body.currentCountry;
+    const { userHash } = request.body;
+    const { currentCountry } = request.body;
     if (!userHash) {
       throw new Error('Missing parameters');
     }
@@ -69,8 +69,8 @@ router.post('/cache/selfDescription', async (request, response) => {
    */
   try {
     // -- Prepare data
-    const userHash = request.body.userHash;
-    const selfDescription = request.body.selfDescription;
+    const { userHash } = request.body;
+    const { selfDescription } = request.body;
     if (!userHash) {
       throw new Error('Missing parameters');
     }
@@ -114,8 +114,8 @@ router.post('/cache/interests', async (request, response) => {
    */
   try {
     // -- Prepare data
-    const userHash = request.body.userHash;
-    const interests = request.body.interests;
+    const { userHash } = request.body;
+    const { interests } = request.body;
     if (!userHash) {
       throw new Error('Missing parameters: userHash');
     }
@@ -159,9 +159,9 @@ router.post('/cache/timeOfDayForCalls', async (request, response) => {
    */
   try {
     // -- Prepare data
-    const userHash = request.body.userHash;
-    const timeOfDayForCalls = request.body.timeOfDayForCalls;
-    const restart = request.body.restart;
+    const { userHash } = request.body;
+    const { timeOfDayForCalls } = request.body;
+    const { restart } = request.body;
     if (!userHash) {
       throw new Error('Missing parameters');
     }
@@ -219,8 +219,8 @@ router.post('/cache/timeOfWeekForCalls', async (request, response) => {
    */
   try {
     // -- Prepare data
-    const userHash = request.body.userHash;
-    const timeOfWeekForCalls = request.body.timeOfWeekForCalls;
+    const { userHash } = request.body;
+    const { timeOfWeekForCalls } = request.body;
     if (!userHash) {
       throw new Error('Missing parameters');
     }
@@ -264,8 +264,8 @@ router.post('/cache/daysOfWeekForCalls', async (request, response) => {
    */
   try {
     // -- Prepare data
-    const userHash = request.body.userHash;
-    const daysOfWeekForCalls = request.body.daysOfWeekForCalls;
+    const { userHash } = request.body;
+    const { daysOfWeekForCalls } = request.body;
     if (!userHash) {
       throw new Error('Missing parameters');
     }
@@ -306,7 +306,7 @@ router.post('/cache/daysOfWeekForCalls', async (request, response) => {
  * Create New Tutor Request
  */
 router.post('/', async (request, response) => {
-  const userHash = request.body.userHash;
+  const { userHash } = request.body;
 
   try {
     // -- Retrieve data from redis

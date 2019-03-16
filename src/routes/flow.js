@@ -23,15 +23,15 @@ const flowCollection = mongoose.connection.collection('dialogues');
  */
 router.post('/', async (request, response) => {
   // -- Prepare data
-  const conversation_id = request.body.conversation_id;
-  const current_pos = request.body.current_pos;
-  const prev_pos = request.body.prev_pos;
-  const next_pos = request.body.next_pos;
-  const open_question = request.body.open_question;
-  const current_flow = request.body.current_flow;
-  const last_interaction = request.body.last_interaction;
-  const awaiting_answer = request.body.awaiting_answer;
-  const prev_flow = request.body.prev_flow;
+  const { conversation_id } = request.body;
+  const { current_pos } = request.body;
+  const { prev_pos } = request.body;
+  const { next_pos } = request.body;
+  const { open_question } = request.body;
+  const { current_flow } = request.body;
+  const { last_interaction } = request.body;
+  const { awaiting_answer } = request.body;
+  const { prev_flow } = request.body;
 
   /**
      * Save data into mongo db
@@ -84,16 +84,16 @@ router.post('/', async (request, response) => {
  */
 router.put('/', async (request, response) => {
   // -- Prepare data
-  const conversation_id = request.body.conversation_id;
-  const current_pos = request.body.current_pos;
-  const open_question = request.body.open_question;
-  const prev_pos = request.body.prev_pos;
-  const next_pos = request.body.next_pos;
-  const current_flow = request.body.current_flow;
-  const last_interaction = request.body.last_interaction;
-  const awaiting_answer = request.body.awaiting_answer;
-  const ready_to_reply = request.body.ready_to_reply;
-  const prev_flow = request.body.prev_flow;
+  const { conversation_id } = request.body;
+  const { current_pos } = request.body;
+  const { open_question } = request.body;
+  const { prev_pos } = request.body;
+  const { next_pos } = request.body;
+  const { current_flow } = request.body;
+  const { last_interaction } = request.body;
+  const { awaiting_answer } = request.body;
+  const { ready_to_reply } = request.body;
+  const { prev_flow } = request.body;
   const updateParams = {};
 
   if (!current_pos) {
@@ -152,7 +152,7 @@ router.put('/', async (request, response) => {
  */
 router.get('/:conversation_id', async (request, response) => {
   // -- Prepare data
-  const conversation_id = request.params.conversation_id;
+  const { conversation_id } = request.params;
 
   /**
      * Retrieve data from mongo db
@@ -211,7 +211,7 @@ router.get('/', async (request, response) => {
  */
 router.delete('/:conversation_id', async (request, response) => {
   // -- Prepare data
-  const conversation_id = request.params.conversation_id;
+  const { conversation_id } = request.params;
 
   /**
      * Delete data from mongo db

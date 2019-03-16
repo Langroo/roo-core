@@ -2,7 +2,7 @@
  * Global dependencies
  */
 const mongoose = require('mongoose');
-const setTimeout = require('timers').setTimeout;
+const { setTimeout } = require('timers');
 const axios = require('axios');
 
 /**

@@ -31,7 +31,7 @@ router.get('/auth', (request, response, next) => {
     console.log('Sender IS before request is :: ', request.query.senderId);
 
     // -- Prepare callback URL with custom parameters
-    const callbackURL = facebookAuth.installed.callbackURL;
+    const { callbackURL } = facebookAuth.installed;
 
     passport.authenticate('facebook', {
       scope: [

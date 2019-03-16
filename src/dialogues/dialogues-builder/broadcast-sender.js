@@ -1,5 +1,5 @@
 const templates = require('./templates');
-const dialoguesContent = require('../dialogues-content').dialoguesContent;
+const { dialoguesContent } = require('../dialogues-content');
 const axios = require('axios');
 
 class broadcastSender {
