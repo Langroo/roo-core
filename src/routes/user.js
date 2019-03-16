@@ -636,7 +636,7 @@ router.post('/', async (request, response) => {
           locale: 'MISSING INFO',
           timezone: 0,
         });
-        slack.notifyError(`Error in getUserPublicInformation()\nFacebook DID not give us the user public profile\nERROR :: ${err}`, 'getUserPublicInformation() in routes/index.js\nLine 979');
+        slack.notifyError(`Error in getUserPublicInformation()\nFacebook DID not give us the user public profile\nERROR :: ${err}`, 'getUserPublicInformation() in roo-core, routes/user.js\nLine 639');
       });
 
     const userCache = await redis.hashGetUser(userHash)
