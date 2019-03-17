@@ -11,7 +11,7 @@ Raven.config('https://96d6795013a54f8f852719919378cc59@sentry.io/304046').instal
 /**
  * Management
  */
-const ScheduleManagement = require('../database/index').ScheduleManagement;
+const { ScheduleManagement } = require('../database/index');
 
 /**
  * Collections
@@ -80,7 +80,7 @@ class RatingSystem {
       };
     }
 
-    const timezone = user.location.timezone;
+    const { timezone } = user.location;
 
     return new Promise(async (resolve, reject) => {
       // -- Prepare rating system content - sunday

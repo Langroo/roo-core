@@ -6,8 +6,8 @@ const express = require('express');
 const router = express.Router();
 const cronjobScheduler = require('node-schedule');
 const crypto = require('crypto');
-const slack = require('../general/index').slack;
-const basicSender = require('../dialogues/dialogues-builder').basicSender;
+const { slack } = require('../general/index');
+const { basicSender } = require('../dialogues/dialogues-builder');
 require('dotenv').config();
 
 /**
@@ -19,10 +19,10 @@ const CRM = require('../APIs/google/crm.management');
 /**
  * DB Instances | Management
  */
-const UsersManagement = require('../database/index').UsersManagement;
-const UsersMetadataManagement = require('../database/index').UsersMetadataManagement;
-const PronunciationManagement = require('../database/index').PronunciationManagement;
-const AnalyticsManagement = require('../database/index').AnalyticsManagement;
+const { UsersManagement } = require('../database/index');
+const { UsersMetadataManagement } = require('../database/index');
+const { PronunciationManagement } = require('../database/index');
+const { AnalyticsManagement } = require('../database/index');
 
 /**
  * DB Instances | Collections
@@ -35,7 +35,7 @@ const tutorRequestCollection = mongoose.connection.collection('tutor_request');
 /**
  * Controllers and digest
  */
-const PaymentController = require('../payment/index').PaymentController;
+const { PaymentController } = require('../payment/index');
 const generateHash = str => crypto.createHash('md5').update(str).digest('hex');
 const redis = require('../cache/index');
 const facebookApi = require('../APIs/facebook').apiCalls;
@@ -80,8 +80,8 @@ router.post('/cache/senderId', async (request, response, next) => {
      */
   try {
     // -- Prepare data
-    const userHash = request.body.userHash;
-    const senderId = request.body.senderId;
+    const { userHash } = request.body;
+    const { senderId } = request.body;
     if (!userHash) {
       throw new Error('Missing parameters');
     }
@@ -124,8 +124,8 @@ router.post('/cache/level', async (request, response, next) => {
      */
   try {
     // -- Prepare data
-    const userHash = request.body.userHash;
-    const level = request.body.level;
+    const { userHash } = request.body;
+    const { level } = request.body;
     if (!userHash) {
       throw new Error('Missing parameters');
     }
@@ -168,8 +168,8 @@ router.post('/cache/sourceFrom', async (request, response, next) => {
      */
   try {
     // -- Prepare data
-    const userHash = request.body.userHash;
-    const sourceFrom = request.body.sourceFrom;
+    const { userHash } = request.body;
+    const { sourceFrom } = request.body;
     if (!userHash) {
       throw new Error('Missing parameters');
     }
@@ -212,8 +212,8 @@ router.post('/cache/sourceValue', async (request, response, next) => {
      */
   try {
     // -- Prepare data
-    const userHash = request.body.userHash;
-    const sourceValue = request.body.sourceValue;
+    const { userHash } = request.body;
+    const { sourceValue } = request.body;
     if (!userHash) {
       throw new Error('Missing parameters');
     }
@@ -253,8 +253,8 @@ router.post('/cache/readyToReply', async (request, response, next) => {
      */
   try {
     // -- Prepare data
-    const userHash = request.body.userHash;
-    const readyToReply = request.body.readyToReply;
+    const { userHash } = request.body;
+    const { readyToReply } = request.body;
     if (!userHash) {
       throw new Error('Missing parameters');
     }
@@ -292,7 +292,7 @@ router.post('/cache/readyToReply', async (request, response, next) => {
 router.get('/cache/:userHash', async (request, response, next) => {
   try {
     // -- Prepare data
-    const userHash = request.params.userHash;
+    const { userHash } = request.params;
     if (!userHash) {
       throw new Error('Missing parameters');
     }
@@ -321,8 +321,8 @@ router.get('/cache/:userHash', async (request, response, next) => {
  */
 router.put('/conversationID', (request, response) => {
   // -- Prepare data
-  const userId = request.body.userId;
-  const conversationID = request.body.conversationID;
+  const { userId } = request.body;
+  const { conversationID } = request.body;
 
   // -- Query and update DB
   UsersManagement.update(userId, { conversationID })
@@ -340,7 +340,7 @@ router.put('/conversationID', (request, response) => {
 router.post('/update_context', async (request, response) => {
   try {
     // -- Prepare data
-    const senderId = request.body.senderId;
+    const { senderId } = request.body;
     const paramsToUpdate = request.body.parameters;
 
     // -- Check that parameters are set
@@ -394,7 +394,7 @@ router.post('/update_context', async (request, response) => {
  * */
 router.post('/update_user', (request, response) => {
   // -- Prepare data
-  const senderId = request.body.senderId;
+  const { senderId } = request.body;
   const paramsToUpdate = request.body.parameters;
   const targetCollection = request.body.destination;
 
@@ -437,8 +437,8 @@ router.post('/update_user', (request, response) => {
 router.put('/level', async (request, response) => {
   try {
     // -- Prepare data
-    const conversation_id = request.body.conversation_id;
-    const level = request.body.level;
+    const { conversation_id } = request.body;
+    const { level } = request.body;
 
     if (!level || !conversation_id) {
       throw 'ERROR :: Where the fuck is the LEVEL and the CONVERSATION_ID, do you think this is a game?!';
@@ -477,8 +477,8 @@ router.put('/level', async (request, response) => {
 router.put('/accent', async (request, response) => {
   try {
     // -- Prepare data
-    const accent = request.body.accent;
-    const conversation_id = request.body.conversation_id;
+    const { accent } = request.body;
+    const { conversation_id } = request.body;
 
     if (!accent || !conversation_id) {
       throw 'ERROR :: Where the fuck is the ACCENT and the CONVERSATION_ID, do you think this is a game?!';
@@ -510,10 +510,10 @@ router.put('/accent', async (request, response) => {
 router.put('/subscription', async (request, response) => {
   try {
     // -- Prepare data
-    const conversation_id = request.body.conversation_id;
-    const product = request.body.product;
-    const status = request.body.status;
-    const weeks_paid = request.body.weeks_paid;
+    const { conversation_id } = request.body;
+    const { product } = request.body;
+    const { status } = request.body;
+    const { weeks_paid } = request.body;
 
     // -- Updating
     if (!conversation_id) {
@@ -544,7 +544,7 @@ router.put('/subscription', async (request, response) => {
  */
 router.get('/:senderId', async (request, response, next) => {
   // -- Prepare data
-  const senderId = request.params.senderId;
+  const { senderId } = request.params;
   const userHash = generateHash(senderId);
   console.log('Getting user data [%s]', senderId);
 
@@ -612,7 +612,7 @@ router.get('/:senderId', async (request, response, next) => {
  */
 router.post('/', async (request, response) => {
   // -- Prepare data
-  const senderId = request.body.senderId;
+  const { senderId } = request.body;
 
   // -- Create user
   try {
@@ -744,7 +744,7 @@ router.post('/', async (request, response) => {
  */
 router.put('/', async (request, response) => {
   // -- Prepare data
-  const senderId = request.body.senderId;
+  const { senderId } = request.body;
 
   /**
      * Do user creation
@@ -823,7 +823,7 @@ router.put('/', async (request, response) => {
  */
 router.post('/pronunciationFile', async (request, response) => {
   // -- Get file purposes
-  const file = request.files.file;
+  const { file } = request.files;
   const stream = fs.createReadStream(file.path);
   const name = `${Date.now()}-${file.originalFilename}`;
   s3.putObject({
@@ -847,9 +847,9 @@ router.post('/pronunciationFile', async (request, response) => {
     const fileUrl = `https://s3.amazonaws.com/${bucketName}/${name}`;
 
     // -- Save data on DB if it is possible
-    const senderId = request.body.senderId;
+    const { senderId } = request.body;
     const user_id = generateHash(senderId || '');
-    const statement = request.body.statement;
+    const { statement } = request.body;
     const date = new Date();
     const url = fileUrl;
     let pronunciation = null;
@@ -883,7 +883,7 @@ router.post('/pronunciationFile', async (request, response) => {
 
 router.post('/initRegister', async (request, response) => {
   // -- Prepare data
-  const senderId = request.body.senderId;
+  const { senderId } = request.body;
 
   /**
    * Do user creation
@@ -976,7 +976,7 @@ router.post('/initRegister', async (request, response) => {
  */
 router.post('/saveSurvey', async (request, response) => {
   // -- Prepare data
-  const senderId = request.body.senderId;
+  const { senderId } = request.body;
 
   /**
      * Do user creation
@@ -1054,7 +1054,7 @@ router.post('/saveSurvey', async (request, response) => {
  */
 router.post('/ratingSystemRespond', async (request, response, next) => {
   // -- Prepare data
-  const senderId = request.body.senderId;
+  const { senderId } = request.body;
 
   /**
      * Do user creation

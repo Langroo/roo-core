@@ -13,11 +13,11 @@ global.Promise = Bluebird;
 /**
  * LOCAL Dependencies
  */
-const slack = require('./general').slack;
+const { slack } = require('./general');
 const cronServices = require('./cron');
 const MongoDB = require('./database/connect');
 const Redis = require('./cache/connect');
-const PaymentController = require('./payment').PaymentController;
+const { PaymentController } = require('./payment');
 require('./general').timezone.config();
 require('./general').array.config();
 require('./general').string.config();

@@ -5,14 +5,14 @@ const mongoose = require('mongoose');
 const uuid = require('uuid/v1');
 const Raven = require('raven');
 const moment = require('moment');
-const slack = require('../general/index').slack;
+const { slack } = require('../general/index');
 Raven.config('https://96d6795013a54f8f852719919378cc59@sentry.io/304046').install();
 
 /**
  * Management
  */
-const ScheduleManagement = require('../database/index').ScheduleManagement;
-const UsersManagement = require('../database/index').UsersManagement;
+const { ScheduleManagement } = require('../database/index');
+const { UsersManagement } = require('../database/index');
 
 /**
  * Collections

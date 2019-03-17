@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const StripeAPI = require('./stripe');
 const planCollection = mongoose.connection.collection('plan');
-const SubscriptionManagement = require('../database/index').SubscriptionManagement;
+const { SubscriptionManagement } = require('../database/index');
 const UserManagement = require('../database/index').UsersManagement;
 
 /**

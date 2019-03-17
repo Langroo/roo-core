@@ -18,13 +18,13 @@ const generateHash = str => crypto.createHash('md5').update(str).digest('hex');
  */
 const facebookAuth = require('./credentials/token');
 const flowCollection = mongoose.connection.collection('dialogues');
-const LoginManagement = require('../../database/index').LoginManagement;
-const UsersManagement = require('../../database/index').UsersManagement;
+const { LoginManagement } = require('../../database/index');
+const { UsersManagement } = require('../../database/index');
 const FacebookUsers = require('./users');
 const googlesheet = require('../google/index');
 const redis = require('../../cache/index');
-const basicSender = require('../../dialogues/dialogues-builder').basicSender;
-const maps = require('../../general/index').maps;
+const { basicSender } = require('../../dialogues/dialogues-builder');
+const { maps } = require('../../general/index');
 
 module.exports = (passport) => {
   passport.serializeUser((user, done) => {

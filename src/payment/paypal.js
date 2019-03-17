@@ -62,8 +62,8 @@ const createPayment = (amount, description, conversationId, currency) => new Pro
 
   createPay(payment)
     .then((transaction) => {
-      const id = transaction.id;
-      const links = transaction.links;
+      const { id } = transaction;
+      const { links } = transaction;
       let counter = links.length;
       while (counter--) {
         if (links[counter].method == 'REDIRECT') {

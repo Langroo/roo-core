@@ -1,6 +1,6 @@
 class templates {
   static format(genericMessage) {
-    let type = genericMessage.type;
+    let { type } = genericMessage;
     const payload = genericMessage.content;
     let fallback_text = '';
 

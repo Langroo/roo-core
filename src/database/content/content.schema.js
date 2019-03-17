@@ -2,7 +2,7 @@
  * Global dependencies
  */
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 const IntegerValidator = require('mongoose-integer');
 
 /**
