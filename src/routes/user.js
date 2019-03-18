@@ -625,22 +625,18 @@ router.post('/', async (request, response) => {
     const userHash = generateHash(senderId);
 
     // -- Request public profile from Facebook using Facebook API
-    let fbUser = await FacebookUsers.getUserPublicInformation(senderId)
-      .catch((err) => {
-        console.error('FUCKING FACEBOOK DID NOT PROVIDE USER PUBLIC PROFILE CUZ THIS :: ', err);
-        fbUser = Object.assign({
-          first_name: 'MISSING INFO',
-          last_name: 'MISSING INFO',
-          gender: 'MISSING INFO',
-          profile_pic: 'MISSING INFO',
-          locale: 'MISSING INFO',
-          timezone: 0,
-        });
-        slack.notifyError(`Error in getUserPublicInformation()\nFacebook DID not give us the user public profile\nERROR :: ${err}`, 'getUserPublicInformation() in roo-core, routes/user.js\nLine 639');
-      });
+    const fbProfile = await FacebookUsers.getUserPublicInformation(senderId);
+    const fbUser = {
+      first_name: fbProfile.first_name || 'MISSING INFO',
+      last_name: fbProfile.last_name || 'MISSING INFO',
+      gender: fbProfile.gender || 'MISSING INFO',
+      profile_pic: fbProfile.profile_pic || 'MISSING INFO',
+      locale: fbProfile.locale || 'en',
+      timezone: fbProfile.timezone || 0,
+    };
 
     const userCache = await redis.hashGetUser(userHash)
-      .catch(() => console.error('ERROR :: Could not retrieve user cache\nLine :: 729'));
+      .catch(() => console.error('ERROR :: Could not retrieve user cache'));
 
     // -- Build user schema
     let user = {
@@ -896,19 +892,15 @@ router.post('/initRegister', async (request, response) => {
 
     // -- Get user information
     const userHash = generateHash(senderId);
-    let fbUser = await FacebookUsers.getUserPublicInformation(senderId)
-      .catch((err) => {
-        console.error('FUCKING FACEBOOK DID NOT PROVIDE USER PUBLIC PROFILE CUZ THIS :: ', err);
-        fbUser = Object.assign({
-          first_name: 'MISSING INFO',
-          last_name: 'MISSING INFO',
-          gender: 'MISSING INFO',
-          profile_pic: 'MISSING INFO',
-          locale: 'MISSING INFO',
-          timezone: 0,
-        });
-        slack.notifyError(`Error in getUserPublicInformation()\nFacebook DID not give us the user public profile\nERROR :: ${err}`, 'getUserPublicInformation() in routes/index.js\nLine 979');
-      });
+    const fbProfile = await FacebookUsers.getUserPublicInformation(senderId);
+    const fbUser = {
+      first_name: fbProfile.first_name || 'MISSING INFO',
+      last_name: fbProfile.last_name || 'MISSING INFO',
+      gender: fbProfile.gender || 'MISSING INFO',
+      profile_pic: fbProfile.profile_pic || 'MISSING INFO',
+      locale: fbProfile.locale || 'en',
+      timezone: fbProfile.timezone || 0,
+    };
 
     // -- Build user schema
     let user = {
