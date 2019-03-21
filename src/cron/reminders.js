@@ -1,7 +1,7 @@
 const remindersManagement = require('../database/index').RemindersManagement;
 const usersManagement = require('../database/index').UsersManagement;
 const moment = require('moment');
-const { basicSender } = require('../dialogues/dialogues-builder');
+const { BasicSender } = require('../dialogues/dialogues-builder');
 const redis = require('../cache/index');
 const nodeScheduler = require('node-schedule');
 const mongoose = require('mongoose');
@@ -43,7 +43,7 @@ class remindersFunctions {
   }
 
   static async sendReminder(senderId, conversationId, message) {
-    const basicSender = new basicSender(senderId);
+    const basicSender = new BasicSender(senderId);
     await basicSender.sendMessages(message)
       .catch(e => console.error('Error sending reminder :: ', e));
   }

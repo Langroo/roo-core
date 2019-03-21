@@ -3,7 +3,7 @@
  */
 const { ContentManagement } = require('../database/index');
 const googlesheet = require('../APIs/google');
-const { basicSender } = require('../dialogues/dialogues-builder');
+const { BasicSender } = require('../dialogues/dialogues-builder');
 
 /**
  * Content instances
@@ -42,10 +42,10 @@ class SheetsToMongo {
     try {
       const response = await Promise.all(Object.values(sheets).map(sheet => sheet.retrieve()));
       const formatted = [].concat.apply([], response.map((rows, index) => [].concat.apply([], rows.map((document, id) => [].concat(
-        basicSender.prepareContent(document.content || ''),
-        basicSender.prepareContent('', `${document.media1}||${document.media2}||${document.media3}||${document.media4}||${document.media5}` || ''),
-        basicSender.prepareContent('', '', document.audio || ''),
-        basicSender.prepareContent('', '', '', document.listen_link),
+        BasicSender.prepareContent(document.content || ''),
+        BasicSender.prepareContent('', `${document.media1}||${document.media2}||${document.media3}||${document.media4}||${document.media5}` || ''),
+        BasicSender.prepareContent('', '', document.audio || ''),
+        BasicSender.prepareContent('', '', '', document.listen_link),
       )
         .map(message => ({
           message,

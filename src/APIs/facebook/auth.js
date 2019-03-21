@@ -17,7 +17,7 @@ const FacebookUsers = require('./users');
 const googlesheet = require('../google/index');
 const redis = require('../../cache/index');
 const Messages = require('../../dialogues/dialogues-content').dialoguesContent;
-const { basicSender } = require('../../dialogues/dialogues-builder');
+const { BasicSender } = require('../../dialogues/dialogues-builder');
 const { maps } = require('../../general/index');
 
 module.exports = function (passport) {
@@ -106,7 +106,7 @@ module.exports = function (passport) {
           await flowCollection.findOneAndUpdate({ conversation_id: user.senderId }, { $set: { open_question: true } }, { new: true });
 
           // -- Send messages for final dialogues when user subscribes again to Langroo
-          messageBuilder = new basicSender(user.senderId);
+          messageBuilder = new BasicSender(user.senderId);
           await messageBuilder.sendMessages(Messages.firstSubscribeLangroo.map((message) => {
             // -- Personalize alternative messages
             if (message.type === 'text') {
@@ -225,12 +225,12 @@ module.exports = function (passport) {
             FirstSubscriptionDate: new Date().toUserTimezone(fbUser.timezone),
           };
           userData.age = ~~((Date.now() - (Number(userData.birthday))) / (31557600000));
-          userData.source.from = userCache.sourceFrom != undefined
+          userData.source.from = userCache.sourceFrom !== undefined
           || userCache.sourceFrom != null
-          || userCache.sourceFrom != '' ? userCache.sourceFrom : '';
-          userData.source.value = userCache.sourceValue != undefined
+          || userCache.sourceFrom !== '' ? userCache.sourceFrom : '';
+          userData.source.value = userCache.sourceValue !== undefined
           || userCache.sourceValue != null
-          || userCache.sourceValue != '' ? userCache.sourceValue : '';
+          || userCache.sourceValue !== '' ? userCache.sourceValue : '';
           if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
             console.log('User FirstSubscriptionDate :: [ %s ]', userData.FirstSubscriptionDate.toString());
           }
@@ -334,7 +334,7 @@ module.exports = function (passport) {
           // -- Update user dialogues
           await flowCollection.findOneAndUpdate({ conversation_id: user.senderId }, { $set: { open_question: true } }, { new: true });
 
-          messageBuilder = new basicSender(user.senderId, user.conversationId);
+          messageBuilder = new BasicSender(user.senderId, user.conversationId);
           await messageBuilder.sendMessages(Messages.firstSubscribeLangroo.map((message) => {
             // -- Personalize alternative messages
             if (message.type === 'text') {

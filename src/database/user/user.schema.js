@@ -46,6 +46,7 @@ const UserSchema = new Schema({
   picture: {
     type: Schema.Types.String,
     required: false,
+    default: 'MISSING INFO',
   },
   profile_link: {
     type: Schema.Types.String,
@@ -65,7 +66,7 @@ const UserSchema = new Schema({
   },
   gender: {
     type: Schema.Types.String,
-    enum: ['male', 'female'],
+    required: false,
   },
   language: {
     type: Schema.Types.String,

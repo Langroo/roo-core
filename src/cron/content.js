@@ -14,7 +14,7 @@ util.promisify(String.prototype.split);
 /**
  * LOCAL dependencies
  */
-const { basicSender } = require('../dialogues/dialogues-builder');
+const { BasicSender } = require('../dialogues/dialogues-builder');
 const redis = require('../cache/index');
 
 /**
@@ -318,7 +318,7 @@ class ContentSystem {
         let lastMessageIndex = current.message;
 
         // -- Prepare messageBuilder instance
-        const messageBuilder = new basicSender(user.senderId);
+        const messageBuilder = new BasicSender(user.senderId);
 
         // -- Message sender
         // -- IF User finished 10 lessons
@@ -464,7 +464,7 @@ class ContentSystem {
   static activateReminder(user) {
     return async () => {
       try {
-        const basicSender = new basicSender(user.senderId);
+        const basicSender = new BasicSender(user.senderId);
 
         // -- Reset bot variables
         await redis.hashSetUser(user._id, 'prev_flow', 'OpenTalk');
@@ -574,7 +574,7 @@ class ContentSystem {
             if (process.env.LOGS_ENABLED === 'true' || process.env.LOGS_ENABLED === '1') {
               console.log('Sending content [%s] messages to user [%s - %s]', schedule.type, schedule.userId, schedule.userName);
             }
-            const basicSender = new basicSender(schedule.senderId);
+            const basicSender = new BasicSender(schedule.senderId);
             await basicSender.sendMessages(messages.map(message => ({ type: message.type, content: message.content })));
           } catch (reason) {
             console.error('\nError at [-> cron/index.js <-] in Function [-> sender <-]\n');
@@ -599,7 +599,7 @@ class ContentSystem {
   static async ratingSystemReminder(user) {
     return new Promise(async (resolve, reject) => {
       try {
-        const basicSender = new basicSender(user.senderId);
+        const basicSender = new BasicSender(user.senderId);
         await basicSender.sendMessages(RatingSystem.RatingMessagesReminder);
         return resolve({ success: true, message: 'Reminder was properly sent' });
       } catch (reason) {
