@@ -23,7 +23,7 @@ const { UsersManagement } = require('../../database/index');
 const FacebookUsers = require('./users');
 const googlesheet = require('../google/index');
 const redis = require('../../cache/index');
-const { basicSender } = require('../../dialogues/dialogues-builder');
+const { BasicSender } = require('../../dialogues/dialogues-builder');
 const { maps } = require('../../general/index');
 
 module.exports = (passport) => {

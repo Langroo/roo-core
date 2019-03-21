@@ -60,10 +60,10 @@ class basicSender {
         const writing = msgs[index].type !== 'text' ? 1250 : Math.min(300 * msgs[index].content.length, 2500);
 
         await typingDots(this.senderId, 1)
-          .catch(e => console.error('Error turning on typing dots at basicSender.management :: ', e));
+          .catch(e => console.error('Error turning on typing dots at BasicSender.management :: ', e));
         await messageTimer(writing);
         await typingDots(this.senderId, 0)
-          .catch(e => console.error('Error turning off typing dots at basicSender.management :: ', e));
+          .catch(e => console.error('Error turning off typing dots at BasicSender.management :: ', e));
 
         // -- Bot is sending the message
         const self = this;
@@ -82,11 +82,11 @@ class basicSender {
             })).data;
 
             if (!pronounceResponse) {
-              throw new Error('[basicSender::sendMessages()] Error while generating the audio file');
+              throw new Error('[BasicSender::sendMessages()] Error while generating the audio file');
             }
             if (!pronounceResponse.data || pronounceResponse.status !== 200) {
               console.log('Error details :: ', pronounceResponse);
-              throw new Error('[basicSender::sendMessages()] Error while generating the audio file :: probably user does not exist');
+              throw new Error('[BasicSender::sendMessages()] Error while generating the audio file :: probably user does not exist');
             }
 
             // -- Send audios using facebook directly
@@ -115,12 +115,12 @@ class basicSender {
               await self.sendMessages(msgs, index + 1);
             });
           } catch (error) {
-            console.error('(╯°□°）╯︵ ┻━┻ ERROR ::\n On basicSender-api.management at audio sending.\n', error.message || error);
+            console.error('(╯°□°）╯︵ ┻━┻ ERROR ::\n On BasicSender-api.management at audio sending.\n', error.message || error);
             console.info('Skipping audio');
             await self.sendMessages(msgs, index + 1);
           }
         } else {
-          // -- Send every other message using basicSender
+          // -- Send every other message using BasicSender
 
           // -- DIRECT FACEBOOK TO SEND MESSAGES
           this.sendMessagesFacebook(msgs[index].type, msgs[index].content)
@@ -128,7 +128,7 @@ class basicSender {
               await self.sendMessages(msgs, index + 1);
             })
             .catch(async (error) => {
-              console.error('basicSender Error :: ', error);
+              console.error('BasicSender Error :: ', error);
               await self.sendMessages(msgs, index + 1);
             });
 
@@ -147,7 +147,7 @@ class basicSender {
             await self.sendMessages(msgs, index + 1)
           })
           .catch(error => {
-            console.error('Error at basicSender.AI request for message to be send to Facebook :: ')
+            console.error('Error at BasicSender.AI request for message to be send to Facebook :: ')
             console.error('Details :: ', {
               status: error.response.status,
               statusText: error.response.statusText,
@@ -158,7 +158,7 @@ class basicSender {
         }
       } else { return true; }
     } catch (reason) {
-      console.error('Error in basicSender.sendMessages :: ', reason);
+      console.error('Error in BasicSender.sendMessages :: ', reason);
     }
   }
 

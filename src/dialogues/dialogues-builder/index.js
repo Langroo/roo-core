@@ -1,4 +1,4 @@
 module.exports = {
-  basicSender: require('./basic-sender'),
+  BasicSender: require('./basic-sender'),
   broadcastSender: require('./broadcast-sender'),
 };

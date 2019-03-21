@@ -6,23 +6,7 @@ const express = require('express');
 const router = express.Router();
 const cronjobScheduler = require('node-schedule');
 const crypto = require('crypto');
-const { slack } = require('../general/index');
-const { basicSender } = require('../dialogues/dialogues-builder');
 require('dotenv').config();
-
-/**
- * Local depencencies
- */
-const FacebookUsers = require('../APIs/facebook').users;
-const CRM = require('../APIs/google/crm.management');
-
-/**
- * DB Instances | Management
- */
-const { UsersManagement } = require('../database/index');
-const { UsersMetadataManagement } = require('../database/index');
-const { PronunciationManagement } = require('../database/index');
-const { AnalyticsManagement } = require('../database/index');
 
 /**
  * DB Instances | Collections
@@ -32,13 +16,6 @@ const userMetadataCollection = mongoose.connection.collection('user-metadata');
 const scheduleCollection = mongoose.connection.collection('schedule');
 const tutorRequestCollection = mongoose.connection.collection('tutor_request');
 
-/**
- * Controllers and digest
- */
-const { PaymentController } = require('../payment/index');
-const generateHash = str => crypto.createHash('md5').update(str).digest('hex');
-const redis = require('../cache/index');
-const facebookApi = require('../APIs/facebook').apiCalls;
 
 /**
  * AWS Bucket
@@ -51,6 +28,27 @@ const AWS = require('aws-sdk');
  */
 const multiparty = require('connect-multiparty');
 const multipartyMiddleware = multiparty();
+
+/**
+ * DB Instances | Management
+ */
+const { UsersManagement } = require('../database/index');
+const { UsersMetadataManagement } = require('../database/index');
+const { PronunciationManagement } = require('../database/index');
+const { AnalyticsManagement } = require('../database/index');
+const FacebookUsers = require('../APIs/facebook').users;
+const CRM = require('../APIs/google/crm.management');
+const { slack } = require('../general/index');
+const { BasicSender } = require('../dialogues/dialogues-builder');
+
+
+/**
+ * Controllers and digest
+ */
+const { PaymentController } = require('../payment/index');
+const generateHash = str => crypto.createHash('md5').update(str).digest('hex');
+const redis = require('../cache/index');
+const facebookApi = require('../APIs/facebook').apiCalls;
 
 /**
  * AWS S3 Bucket Account
@@ -955,7 +953,7 @@ router.post('/initRegister', async (request, response) => {
     response.statusMessage = 'Good job! The pretty little user\'s basic data was saved successfully';
     response.json({ statusMessage: response.statusMessage, statusCode: response.statusCode, data: user });
   } catch (error) {
-    slack.notifyError(`Error in getUserPublicInformation()\nFacebook DID not give us the user public profile\nERROR :: ${error}`, 'getUserPublicInformation() in routes/index.js\nLine 979');
+    slack.notifyError(`Error in getUserPublicInformation():\nFetching user public profile\nERROR :: ${error}`, 'In route /initRegister');
     response.status(500);
     response.statusMessage = 'User created error';
     console.log('Error creating user after introduction :: ', error);
@@ -1091,7 +1089,7 @@ router.post('/ratingSystemRespond', async (request, response, next) => {
     }
 
     // -- Send last message [Thank you message]
-    const messageBuilder = new basicSender(user.senderId);
+    const messageBuilder = new BasicSender(user.senderId);
     await messageBuilder.sendMessages([
       { type: 'text', content: `WOJO! Great job ${user.name.short_name}, I will forward your rating to my team` },
     ]);
