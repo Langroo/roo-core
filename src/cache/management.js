@@ -17,8 +17,7 @@ class RedisManagement {
    */
   async hashDelUser(userHash) {
     try {
-      await (await redis).del(`user:${userHash}`)
-        .then(res => console.log('User deleted from redis: ', res));
+      await (await redis).del(`user:${userHash}`).then(res => console.log('User deleted from redis: ', res));
     } catch (error) {
       console.log('An error occurred :: ', error);
     }
@@ -48,20 +47,33 @@ class RedisManagement {
       const { userHash } = dataObject;
       const userValue = dataObject[propertyName];
 
-      if (!userHash) { throw new Error('userHash missing in data object received'); }
-      if (!userValue) { throw new Error('userValue missing in data object received'); }
+      if (!userHash) {
+        throw new Error('userHash missing in data object received');
+      }
+      if (!userValue) {
+        throw new Error('userValue missing in data object received');
+      }
 
       const create = await this.hashSetUser(userHash, propertyName, userValue);
-      if (!create) { throw new Error('[Redis] Error while creating'); }
+      if (!create) {
+        throw new Error('[Redis] Error while creating');
+      }
       const retrieve = await this.hashGetUser(userHash);
 
       return { statusMessage: 'created', statusCode: 201, data: retrieve };
     } catch (reason) {
-      if (reason.response) { console.error('(╯°□°）╯ ERROR STORING USER CACHE :: \n--> %s\n--> Status Code: %s', reason.response.statusText, reason.response.status); return reason; }
+      if (reason.response) {
+        console.error(
+          '(╯°□°）╯ ERROR STORING USER CACHE :: \n--> %s\n--> Status Code: %s',
+          reason.response.statusText,
+          reason.response.status,
+        );
+        return reason;
+      }
       console.error('(╯°□°）╯ ERROR STORING USER CACHE :: \n', reason);
       return reason;
     }
   }
 }
 
-module.exports = new RedisManagement();
+module.exports = RedisManagement;

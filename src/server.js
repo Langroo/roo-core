@@ -15,7 +15,6 @@ global.Promise = Bluebird;
  * LOCAL Dependencies
  */
 const { slack } = require('./general');
-const cronServices = require('./cron');
 const MongoDB = require('./database/connect');
 const { PaymentController } = require('./payment');
 require('./general').timezone.config();
