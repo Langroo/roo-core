@@ -98,8 +98,6 @@ Promise.all([MongoDB])
         resolve();
       });
     });
-
-    await cronServices.MainCronJob();
   })
   .catch((reason) => {
     slack.notifyError(reason, 'server.js');
