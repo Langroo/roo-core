@@ -37,18 +37,15 @@ module.exports.MainCronJob = async () => {
   console.log('----------- CRONJOB INFORMATION -----------');
 
   // -- Content DB refresh
-  await SheetsToMongo.execute()
-    .catch(() => console.error('Error uploading GoogleSheets content to MongoDB'));
-  await CRM.tutorRequestUpdate()
-    .catch(() => console.error('Error downloading tutor requests data from MongoDB to GoogleSheets'));
+  await SheetsToMongo.execute().catch(() => console.error('Error uploading GoogleSheets content to MongoDB'));
+  await CRM.tutorRequestUpdate().catch(() => console.error('Error downloading tutor requests data from MongoDB to GoogleSheets'));
 
   // -- CRM Refresh MODE when a big change has been made to the API
   if (process.env.REFRESH_MODE === 'true' || process.env.REFRESH_MODE === '1') {
     await CRM.profileFullUpdate()
       .catch(e => console.error('\nError downloading users full profile data from MongoDB to GoogleSheets :: ', e))
       .then(async () => {
-        await CRM.surveyUpdate()
-          .catch(err => console.error('\nError downloading surveys data from MongoDB to GoogleSheets :: ', err));
+        await CRM.surveyUpdate().catch(err => console.error('\nError downloading surveys data from MongoDB to GoogleSheets :: ', err));
       });
   }
 
@@ -66,7 +63,7 @@ module.exports.MainCronJob = async () => {
 // -- Update last interaction cronjob
 module.exports.UpdateLastInteractionCron = () => {
   let cronScheduleTime = '5 * * * *';
-  const taskName = 'Update User\'s Last Interaction Cronjob';
+  const taskName = "Update User's Last Interaction Cronjob";
   if (process.env.DEBUG_MODE === '1' || process.env.DEBUG_MODE === 'true') {
     cronScheduleTime = '*/2 * * * *';
   }
@@ -74,8 +71,7 @@ module.exports.UpdateLastInteractionCron = () => {
     console.info('\n\n----------- CRONJOB INFORMATION -----------');
     console.info('Running (%s)\nAt :: [%s]', taskName, Date());
     // -- Call users interaction
-    await UserActions.updateLastInteraction()
-      .catch(err => console.log('Update of Users Last Interactions >> FAILED :: ', err));
+    await UserActions.updateLastInteraction().catch(err => console.log('Update of Users Last Interactions >> FAILED :: ', err));
   });
 };
 
@@ -102,7 +98,8 @@ module.exports.newQuiz = async () => {
   }
   scheduler.scheduleJob(timeOfQuiz, async () => {
     await broadcastSender.sendBroadcastMessage('wednesdayBroadcastQuiz', 'UNSUBSCRIBED');
-    broadcastQuizTools.setContextInBot(true)
+    broadcastQuizTools
+      .setContextInBot(true)
       .catch(() => console.log('An error occurred setting the users awaiting_answer parameter to 1 for the quiz answer'));
   });
 };
@@ -117,15 +114,8 @@ module.exports.theWinnerIs = async () => {
   scheduler.scheduleJob(timeOfWinner, async () => {
     // -- Send the broadcast dialog with the messages of the Quiz
     await broadcastSender.sendBroadcastMessage('theWinnerIs', 'UNSUBSCRIBED');
-    broadcastQuizTools.setContextInBot(false)
-      .catch(() => console.log('An error occurred setting the users awaiting_answer parameter to 1 for the quiz answer'));
-  });
-};
-
-// Restore users to previous context
-module.exports.oneTimeFix = async () => {
-  scheduler.scheduleJob('35 14 * * 3', async () => {
-    broadcastQuizTools.setContextInBot(false)
+    broadcastQuizTools
+      .setContextInBot(false)
       .catch(() => console.log('An error occurred setting the users awaiting_answer parameter to 1 for the quiz answer'));
   });
 };

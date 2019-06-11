@@ -8,6 +8,7 @@ const path = require('path');
 const Bluebird = require('bluebird');
 const Raven = require('raven');
 require('dotenv').config();
+
 global.Promise = Bluebird;
 
 /**
@@ -16,7 +17,6 @@ global.Promise = Bluebird;
 const { slack } = require('./general');
 const cronServices = require('./cron');
 const MongoDB = require('./database/connect');
-const Redis = require('./cache/connect');
 const { PaymentController } = require('./payment');
 require('./general').timezone.config();
 require('./general').array.config();
@@ -25,17 +25,15 @@ require('./general').string.config();
 /**
  * Establish DB connection before create server instance
  */
-Promise.all([MongoDB, Redis])
+Promise.all([MongoDB])
   .then(async (response) => {
     console.log('---------- CONNECTION SUCCESFULL -----------');
     console.log('Database instances connection established properly');
     console.log(response[0] ? 'MongoDB status :OK:' : 'MongoDB status :FAILED:');
-    console.log(response[1] ? 'Redis status :OK:' : 'Redis status :FAILED:');
     console.log('-------------------------------------------\n');
     if (process.env.REFRESH_MODE === '1' || process.env.REFRESH_MODE === 'true') {
       console.log('-------------- CREATING PAYMENT PLANS -----------------');
-      await PaymentController.createPlans()
-        .catch(e => console.error(e));
+      await PaymentController.createPlans().catch(e => console.error(e));
       console.log('----------- PAYMENT PLANS CREATED SUCCESSFULLY ------------');
     }
 
@@ -47,20 +45,25 @@ Promise.all([MongoDB, Redis])
     app.set('port', process.env.PORT || 5000);
 
     // -- View engine setup
-    app.engine('hbs', hbs({
-      extname: 'hbs',
-      defaultLayout: 'home',
-      layoutsDir: path.join(__dirname, 'views', 'layouts'),
-    }));
+    app.engine(
+      'hbs',
+      hbs({
+        extname: 'hbs',
+        defaultLayout: 'home',
+        layoutsDir: path.join(__dirname, 'views', 'layouts'),
+      }),
+    );
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'hbs');
 
     // -- Middlewares management
     app.use(morgan('combined'));
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({
-      extended: true,
-    }));
+    app.use(
+      bodyParser.urlencoded({
+        extended: true,
+      }),
+    );
 
     app.use(passport.initialize());
     app.use(passport.session());
@@ -96,15 +99,12 @@ Promise.all([MongoDB, Redis])
       });
     });
 
-    cronServices.messagesMaintenance();
-    cronServices.UpdateLastInteractionCron();
-    cronServices.LabelCreationCron();
     await cronServices.MainCronJob();
-    cronServices.SurveyToGoogleSheetsCron();
   })
   .catch((reason) => {
     slack.notifyError(reason, 'server.js');
     console.log('An error occurred trying to connect to database instances');
     console.log('Details :: ', reason);
     Raven.captureException(reason);
+    process.exit(1);
   });
