@@ -2,3 +2,5 @@
 
 This is the API for the Roo Chatbot endpoints. In here payments,
 database management and general administration is done.
+
+This will be reworked to typescript
