@@ -50,7 +50,7 @@
     "eachasync": "^1.0.3",
     "express": "^4.16.4",
     "express-handlebars": "^3.0.0",
-    "follow-redirects": "^1.6.1",
+    "follow-redirects": "^1.14.7",
     "google-auth-library": "^2.0.2",
     "googleapis": "^22.2.0",
     "hbs": "^4.0.3",
