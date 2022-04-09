@@ -54,7 +54,7 @@
     "google-auth-library": "^2.0.2",
     "googleapis": "^22.2.0",
     "hbs": "^4.0.3",
-    "moment": "^2.23.0",
+    "moment": "^2.29.2",
     "mongoose": "^4.13.17",
     "mongoose-integer": "^0.1.1",
     "mongoose-type-email": "^1.0.10",
