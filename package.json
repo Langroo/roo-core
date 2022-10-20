@@ -55,7 +55,7 @@
     "googleapis": "^22.2.0",
     "hbs": "^4.0.3",
     "moment": "^2.23.0",
-    "mongoose": "^4.13.17",
+    "mongoose": "^4.13.21",
     "mongoose-integer": "^0.1.1",
     "mongoose-type-email": "^1.0.10",
     "morgan": "^1.9.1",
